@@ -1,8 +1,11 @@
-import './global.css';
-import { UiLayout } from '@/components/ui/ui-layout';
 import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
+import { UiLayout } from '@/components/ui/ui-layout';
+import { Inter } from 'next/font/google';
+import './global.css';
 import { ReactQueryProvider } from './react-query-provider';
+
+const inter = Inter({ subsets: ['latin'], fallback: ['Noto Sans JP'] });
 
 export const metadata = {
   title: 'payobv-io',
@@ -22,7 +25,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+JP:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={inter.className}>
         <ReactQueryProvider>
           <ClusterProvider>
             <SolanaProvider>
