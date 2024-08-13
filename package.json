@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.30.0",
+    "@ducanh2912/next-pwa": "^10.2.8",
     "@payobv-io/source": "file:",
     "@solana-developers/preset-next": "3.0.1",
     "@solana/spl-token": "0.4.6",
