@@ -1,7 +1,7 @@
-import withPWAInit from "@ducanh2912/next-pwa";
+import withPWAInit from '@ducanh2912/next-pwa';
 
 const withPWA = withPWAInit({
-  dest: "public",
+  dest: 'public',
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   swcMinify: true,
@@ -13,7 +13,7 @@ const withPWA = withPWAInit({
 
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ["oracledb"],
+    serverComponentsExternalPackages: ['oracledb'],
   },
 };
 
