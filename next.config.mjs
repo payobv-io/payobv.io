@@ -11,10 +11,6 @@ const withPWA = withPWAInit({
   },
 });
 
-const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['oracledb'],
-  },
-};
+const nextConfig = {};
 
 export default withPWA(nextConfig);

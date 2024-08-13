@@ -2,11 +2,16 @@ import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
 import { UiLayout } from '@/components/ui/ui-layout';
 import { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+
+import { cn } from '@/lib/utils';
+import { Inter as FontSans } from 'next/font/google';
 import './global.css';
 import { ReactQueryProvider } from './react-query-provider';
 
-const inter = Inter({ subsets: ['latin'], fallback: ['Noto Sans JP'] });
+const fontSans = FontSans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 export const metadata: Metadata = {
   manifest: '/manifest.json',
@@ -28,14 +33,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="./favicon.ico" sizes="any" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Noto+Sans+JP:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body className={inter.className}>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable
+        )}
+      >
         <ReactQueryProvider>
           <ClusterProvider>
             <SolanaProvider>

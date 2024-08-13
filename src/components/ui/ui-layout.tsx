@@ -1,19 +1,18 @@
 'use client';
 
-import { WalletButton } from '../solana/solana-provider';
-import * as React from 'react';
 import { ReactNode, Suspense, useEffect, useRef } from 'react';
+import { WalletButton } from '../solana/solana-provider';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import toast, { Toaster } from 'react-hot-toast';
 import { AccountChecker } from '../account/account-ui';
 import {
   ClusterChecker,
   ClusterUiSelect,
   ExplorerLink,
 } from '../cluster/cluster-ui';
-import toast, { Toaster } from 'react-hot-toast';
 
 export function UiLayout({
   children,
@@ -28,9 +27,6 @@ export function UiLayout({
     <div className="h-full flex flex-col">
       <div className="navbar bg-base-300 text-neutral-content flex-col md:flex-row space-y-2 md:space-y-0">
         <div className="flex-1">
-          <Link className="btn btn-ghost normal-case text-xl" href="/">
-            <img className="h-4 md:h-6" alt="Logo" src="/logo.png" />
-          </Link>
           <ul className="menu menu-horizontal px-1 space-x-2">
             {links.map(({ label, path }) => (
               <li key={path}>
