@@ -1,9 +1,10 @@
 'use client';
 
 import { useWallet } from '@solana/wallet-adapter-react';
-import { signIn } from 'next-auth/react';
 import { WalletButton } from '../solana/solana-provider';
 
+import { signOut } from 'next-auth/react';
+import { Button } from '../ui/button';
 import { AppHero } from '../ui/ui-layout';
 import { AccountBalance, AccountButtons } from './account-ui';
 
@@ -13,32 +14,30 @@ export default function AccountListFeature() {
   return (
     <>
       <div className="h-full flex flex-col">
-        <div className="flex-grow mx-4 lg:mx-auto">
-          <div className="hero py-[64px]">
-            <div className="hero-content text-center">
-              {connected ? (
-                <div>
-                  <AppHero
-                    title={<AccountBalance address={publicKey!} />}
-                    subtitle={<div className="my-4"></div>}
-                  >
-                    <div className="my-4">
-                      <AccountButtons address={publicKey!} />
-                    </div>
-                  </AppHero>
-                </div>
-              ) : null}
-
-              <WalletButton />
-              <button
-                onClick={() => {
-                  signIn('github', { callbackUrl: '/profile' });
-                }}
+        <div className="flex-grow mx-4 lg:mx-auto hero py-[64px] hero-content text-center">
+          {connected ? (
+            <div>
+              <AppHero
+                title={<AccountBalance address={publicKey!} />}
+                subtitle={<div className="my-4"></div>}
               >
-                Sign in with github
-              </button>
+                <div className="my-4">
+                  <AccountButtons address={publicKey!} />
+                </div>
+              </AppHero>
             </div>
-          </div>
+          ) : null}
+
+          <WalletButton />
+        </div>
+        <div className="hero-content text-center">
+          <Button
+            onClick={() => {
+              signOut({ callbackUrl: '/' });
+            }}
+          >
+            Log Out
+          </Button>
         </div>
       </div>
     </>

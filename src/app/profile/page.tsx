@@ -1,18 +1,10 @@
 'use client';
-import { signOut } from 'next-auth/react';
+import AccountListFeature from '@/components/account/account-list-feature';
 
 export default function Page() {
   return (
     <>
-      <div>
-        <button
-          onClick={() => {
-            signOut({ callbackUrl: '/' });
-          }}
-        >
-          Log out
-        </button>
-      </div>
+      <AccountListFeature />
     </>
   );
 }
