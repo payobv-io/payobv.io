@@ -1,6 +1,7 @@
 'use client';
 
 import { useWallet } from '@solana/wallet-adapter-react';
+import { signIn } from 'next-auth/react';
 import { WalletButton } from '../solana/solana-provider';
 
 import { AppHero } from '../ui/ui-layout';
@@ -27,7 +28,15 @@ export default function AccountListFeature() {
                   </AppHero>
                 </div>
               ) : null}
+
               <WalletButton />
+              <button
+                onClick={() => {
+                  signIn('github', { callbackUrl: '/profile' });
+                }}
+              >
+                Sign in with github
+              </button>
             </div>
           </div>
         </div>

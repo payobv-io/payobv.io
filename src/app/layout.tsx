@@ -2,6 +2,7 @@ import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
 import { Metadata } from 'next';
 
+import SessionWrapper from '@/context/session-wrapper';
 import { cn } from '@/lib/utils';
 import { Inter as FontSans } from 'next/font/google';
 import './global.css';
@@ -34,11 +35,13 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <ReactQueryProvider>
-          <ClusterProvider>
-            <SolanaProvider>{children}</SolanaProvider>
-          </ClusterProvider>
-        </ReactQueryProvider>
+        <SessionWrapper>
+          <ReactQueryProvider>
+            <ClusterProvider>
+              <SolanaProvider>{children}</SolanaProvider>
+            </ClusterProvider>
+          </ReactQueryProvider>
+        </SessionWrapper>
       </body>
     </html>
   );
