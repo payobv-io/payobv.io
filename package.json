@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.8",
+    "@prisma/client": "^5.18.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@solana-developers/preset-next": "3.0.1",
@@ -26,7 +27,9 @@
     "buffer": "6.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "docker": "^1.0.0",
     "encoding": "0.1.13",
+    "mongoose": "^8.5.3",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
     "payobv-io": "file:",
@@ -39,6 +42,8 @@
   },
   "devDependencies": {
     "@types/react": "18.3.3",
-    "eslint": "^8.0.0"
+    "eslint": "^8.0.0",
+    "prisma": "^5.18.0",
+    "ts-node": "^10.9.2"
   }
 }
