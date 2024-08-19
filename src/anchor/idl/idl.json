@@ -1,7 +1,7 @@
 {
-  "address": "GA5u51jjph23EiVYE5wNUx1bNgEzo72kd1FVFrqBJPJ9",
+  "address": "FQvAzGRC6eSDaa1GvuXRDnbBxAxCT8WhwLsj8psnWxSk",
   "metadata": {
-    "name": "simple_contract",
+    "name": "payobvio_solana_program",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
