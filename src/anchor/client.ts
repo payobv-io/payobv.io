@@ -1,6 +1,6 @@
 import { AnchorProvider, Program } from '@coral-xyz/anchor';
 import { Connection } from '@solana/web3.js';
-import { SimpleContract } from './idl/idl';
+import { PayobvioSolanaProgram } from './idl/idl';
 import idl from './idl/idl.json';
 
 const network = 'https://api.devnet.solana.com';
@@ -11,7 +11,7 @@ export function getProgram(wallet: any) {
   const provider = new AnchorProvider(connection, wallet, {
     preflightCommitment: 'processed',
   });
-  const program = new Program(idl as SimpleContract, provider);
+  const program = new Program(idl as PayobvioSolanaProgram, provider);
 
   return program;
 }
