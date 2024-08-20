@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '../../../../lib/prisma';
+import db from '../../../../db/db';
 
 
-type Params = {
-  id: string;
-};
-
-
-export async function GET(req: NextRequest, { params }: { params: Params }) {
-  const user = await prisma.user.findUnique({
+export async function GET(context: any) {
+  const { params } = context
+  const user = await db.user.findUnique({
     where: { user_id: Number(params.id) },
   });
 
@@ -20,11 +16,12 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
 }
 
 
-export async function PUT(req: NextRequest, { params }: { params: Params }) {
+export async function PUT(req: NextRequest, context: any) {
+  const { params } = context
   const { username, email, role } = await req.json();
 
   try {
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await db.user.update({
       where: { user_id: Number(params.id) },
       data: {
         username,
@@ -40,9 +37,10 @@ export async function PUT(req: NextRequest, { params }: { params: Params }) {
 }
 
 
-export async function DELETE(req: NextRequest, { params }: { params: Params }) {
+export async function DELETE(context: any) {
+  const { params } = context
   try {
-    await prisma.user.delete({
+    await db.user.delete({
       where: { user_id: Number(params.id) },
     });
 
