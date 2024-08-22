@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/payobvio_solana_program.json`.
  */
 export type PayobvioSolanaProgram = {
-  "address": "FQvAzGRC6eSDaa1GvuXRDnbBxAxCT8WhwLsj8psnWxSk",
+  "address": "Bo9Nd6FuheXnZoPx19s4uWwSjuLct3nHnZ7ZjrKdSUGS",
   "metadata": {
     "name": "payobvioSolanaProgram",
     "version": "0.1.0",
@@ -14,51 +14,81 @@ export type PayobvioSolanaProgram = {
   },
   "instructions": [
     {
-      "name": "initialize",
+      "name": "assignContributor",
       "discriminator": [
-        175,
-        175,
-        109,
-        31,
-        13,
-        152,
-        155,
-        237
+        191,
+        42,
+        156,
+        8,
+        11,
+        20,
+        89,
+        218
       ],
       "accounts": [
         {
-          "name": "dataAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  100,
-                  97,
-                  116,
-                  97,
-                  95,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "user"
-              }
-            ]
-          }
-        },
-        {
-          "name": "user",
+          "name": "maintainer",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "escrowAccount",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "contributor",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "closeEscrow",
+      "discriminator": [
+        139,
+        171,
+        94,
+        146,
+        191,
+        91,
+        144,
+        50
+      ],
+      "accounts": [
+        {
+          "name": "maintainer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "escrowAccount",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "depositFunds",
+      "discriminator": [
+        202,
+        39,
+        52,
+        211,
+        53,
+        20,
+        250,
+        88
+      ],
+      "accounts": [
+        {
+          "name": "maintainer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "escrowAccount",
+          "writable": true
         },
         {
           "name": "systemProgram",
@@ -67,36 +97,215 @@ export type PayobvioSolanaProgram = {
       ],
       "args": [
         {
-          "name": "message",
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initializeEscrow",
+      "discriminator": [
+        243,
+        160,
+        77,
+        153,
+        11,
+        92,
+        48,
+        209
+      ],
+      "accounts": [
+        {
+          "name": "maintainer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "escrowAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  115,
+                  99,
+                  114,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "issueId"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "bountyAmount",
+          "type": "u64"
+        },
+        {
+          "name": "issueId",
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "refund",
+      "discriminator": [
+        2,
+        96,
+        183,
+        251,
+        63,
+        208,
+        46,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "maintainer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "escrowAccount",
+          "writable": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "releaseFunds",
+      "discriminator": [
+        225,
+        88,
+        91,
+        108,
+        126,
+        52,
+        2,
+        26
+      ],
+      "accounts": [
+        {
+          "name": "maintainer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "contributor",
+          "writable": true
+        },
+        {
+          "name": "escrowAccount",
+          "writable": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
     {
-      "name": "dataAccount",
+      "name": "escrowAccount",
       "discriminator": [
-        85,
-        240,
-        182,
-        158,
-        76,
-        7,
+        36,
+        69,
+        48,
         18,
-        233
+        128,
+        225,
+        125,
+        135
       ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "invalidEscrowState",
+      "msg": "The escrow is not in the correct state for this operation"
+    },
+    {
+      "code": 6001,
+      "name": "invalidDepositAmount",
+      "msg": "The deposit amount does not match the bounty amount"
+    },
+    {
+      "code": 6002,
+      "name": "invalidContributor",
+      "msg": "The contributor does not match the assigned contributor"
     }
   ],
   "types": [
     {
-      "name": "dataAccount",
+      "name": "escrowAccount",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "message",
+            "name": "maintainer",
+            "type": "pubkey"
+          },
+          {
+            "name": "contributor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "issueId",
             "type": "string"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "escrowState"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "escrowState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "initialized"
+          },
+          {
+            "name": "funded"
+          },
+          {
+            "name": "assigned"
+          },
+          {
+            "name": "completed"
+          },
+          {
+            "name": "refunded"
           }
         ]
       }
