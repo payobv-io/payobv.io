@@ -1,9 +1,8 @@
+import db from '@/db/db';
 import { NextRequest, NextResponse } from 'next/server';
-import db from '../../../../db/db';
-
 
 export async function GET(context: any) {
-  const { params } = context
+  const { params } = context;
   const user = await db.user.findUnique({
     where: { user_id: Number(params.id) },
   });
@@ -15,9 +14,8 @@ export async function GET(context: any) {
   return NextResponse.json(user);
 }
 
-
 export async function PUT(req: NextRequest, context: any) {
-  const { params } = context
+  const { params } = context;
   const { username, email, role } = await req.json();
 
   try {
@@ -36,9 +34,8 @@ export async function PUT(req: NextRequest, context: any) {
   }
 }
 
-
 export async function DELETE(context: any) {
-  const { params } = context
+  const { params } = context;
   try {
     await db.user.delete({
       where: { user_id: Number(params.id) },
