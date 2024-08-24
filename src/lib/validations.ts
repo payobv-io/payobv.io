@@ -16,3 +16,8 @@ export const installationCreateSchema = z.object({
     isPrivate: z.boolean(),
   }))
 });
+
+export const installationDeleteSchema = z.object({
+  userId: z.number(),
+  repositories: z.array(z.number())
+});
