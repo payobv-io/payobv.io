@@ -69,7 +69,7 @@ model Bounty {
   escrow           Escrow?  @relation(fields: [escrowId], references: [id])
   escrowId         Int?  @unique
   amount           Float
-  status           BountyStatus
+  status           BountyStatus @default(PENDING_ESCROW)
   signature        String?
   transactionId    Int?  @unique
   createdAt        DateTime @default(now())
@@ -79,7 +79,7 @@ model Bounty {
 model Escrow {
   id               Int   @id @default(autoincrement())
   accountAddress   String   @unique
-  status           EscrowStatus
+  status           EscrowStatus @default(FUNDED)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   bounty           Bounty?
@@ -106,10 +106,4 @@ enum BountyStatus {
   OPEN
   COMPLETED
   CANCELLED
-}
-
-enum TransactionStatus {
-  PENDING
-  COMPLETED
-  FAILED
 }
