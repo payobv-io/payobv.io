@@ -5,13 +5,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon, CodeIcon, Github, WrenchIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Component() {
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
+  const router = useRouter();
   const searchParams = useSearchParams();
+
   const searchParamsValue = searchParams.get('type');
 
   const options = [
@@ -29,11 +31,14 @@ export default function Component() {
     },
   ];
 
-  const handleSignIn = () => {
-    signIn('github');
+  const chooseRole = async (role: string) => {
+    if (role === 'maintainer') {
+      const installationUrl = `https://github.com/apps/payobvio-github-app/installations/new`;
+      window.location.href = installationUrl;
+    } else {
+      router.push('/profile');
+    }
   };
-
-  const chooseRole = async (role: string) => {};
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4">
@@ -117,7 +122,7 @@ export default function Component() {
                 onHoverEnd={() => setIsHovered(false)}
               >
                 <Button
-                  onClick={handleSignIn}
+                  onClick={() => signIn('github')}
                   className="w-full py-6 text-lg font-semibold"
                 >
                   <Github className="h-5 w-5 mr-2" />
