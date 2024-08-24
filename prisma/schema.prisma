@@ -28,7 +28,7 @@ model Wallet {
   id     Int     @id @default(autoincrement())
   userId Int
   owner   User    @relation(fields: [userId], references: [id])
-  publicAddress String
+  publicAddress String @unique
 }
 
 model Repository {
