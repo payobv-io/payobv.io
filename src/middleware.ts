@@ -7,9 +7,9 @@ import { NextResponse } from 'next/server';
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  const { pathname } = req.nextUrl;
+  const { pathname, searchParams } = req.nextUrl;
 
-  if (token && pathname === '/') {
+  if (token && pathname === '/' && !searchParams.toString()) {
     return NextResponse.redirect(new URL('/profile', req.url));
   }
 
