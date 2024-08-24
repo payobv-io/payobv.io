@@ -36,7 +36,6 @@ model Repository {
   name          String 
   installationId Int
   isPrivate     Boolean
-  deletedAt    DateTime? 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   RepositoryUser RepositoryUser[]
@@ -51,8 +50,7 @@ model RepositoryUser {
   user          User     @relation(fields: [userId], references: [id])
   repository    Repository @relation(fields: [repositoryId], references: [id])
   createdAt     DateTime @default(now())
-  deletedAt     DateTime?
-
+  
   @@unique([userId, repositoryId, role]) 
 }
 
