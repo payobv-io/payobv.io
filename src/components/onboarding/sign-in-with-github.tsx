@@ -2,13 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { signInStore } from '@/stores/sign-in-store';
 import { motion } from 'framer-motion';
 import { CodeIcon, WrenchIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
 
 export default function SignInWithGithub() {
-  const [hoveredOption, setHoveredOption] = useState<string | null>(null);
+  const { hoveredOption, setUserRole, setHoveredOption } = signInStore();
 
   const options = [
     {
@@ -24,6 +24,11 @@ export default function SignInWithGithub() {
       icon: CodeIcon,
     },
   ];
+
+  const handleSignIn = async (role: string) => {
+    setUserRole(role);
+    signIn('github');
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4">
@@ -46,7 +51,7 @@ export default function SignInWithGithub() {
                 <Button
                   variant="outline"
                   className="w-full justify-start text-left h-auto py-4 px-4"
-                  onClick={() => signIn('github')}
+                  onClick={() => handleSignIn(option.id)}
                 >
                   <option.icon className="h-5 w-5 mr-3 text-gray-500" />
                   <div>
