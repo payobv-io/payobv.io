@@ -8,8 +8,8 @@ interface OAuthConfig {
 }
 
 const githubConfig: OAuthConfig = {
-  clientId: process.env.GITHUB_CLIENT_ID || '',
-  clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+  clientId: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID || '',
+  clientSecret: process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET || '',
   nextAuthSecret: process.env.NEXTAUTH_SECRET || '',
 };
 
