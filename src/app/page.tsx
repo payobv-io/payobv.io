@@ -31,7 +31,7 @@ export default function Page({ searchParams }: any) {
               </div>
               <div
                 className={`w-8 h-8 rounded-full ${
-                  searchParamsValue === 'select-role'
+                  searchParamsValue === 'select-wallet'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-gray-400'
                 } flex items-center justify-center font-semibold`}
@@ -40,7 +40,7 @@ export default function Page({ searchParams }: any) {
               </div>
               <div
                 className={`w-8 h-8 rounded-full ${
-                  searchParamsValue === 'select-wallet'
+                  searchParamsValue === 'select-role'
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-200 text-gray-400'
                 } flex items-center justify-center font-semibold`}

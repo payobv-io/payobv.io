@@ -64,7 +64,7 @@ export const options: AuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) {
-        return `${baseUrl}?type=select-role`;
+        return `${baseUrl}?type=select-wallet`;
       }
       return baseUrl;
     },

@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   const installation_id = searchParams.get('installation_id');
   const setup_action = searchParams.get('setup_action');
 
-  const redirectUrl = `${req.nextUrl.origin}/?type=select-wallet`;
+  const redirectUrl = `${req.nextUrl.origin}/profile`;
 
   return NextResponse.redirect(redirectUrl);
 }
