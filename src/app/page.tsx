@@ -1,4 +1,4 @@
-import { ChooseRole } from '@/components/onboarding/choose-role';
+import { SelectRole } from '@/components/onboarding/select-role';
 import { SelectWallet } from '@/components/onboarding/select-wallet';
 import { SignInWithGithub } from '@/components/onboarding/sign-in-with-github';
 import { Card, CardContent } from '@/components/ui/card';
@@ -60,7 +60,7 @@ export default function Page({ searchParams }: any) {
                     <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
                       Choose Your Role
                     </h2>
-                    <ChooseRole />
+                    <SelectRole />
                   </>
                 ) : (
                   <>

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 
-export const ChooseRole = () => {
+export const SelectRole = () => {
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
 
   const router = useRouter();
@@ -16,7 +16,7 @@ export const ChooseRole = () => {
       const installationUrl = `https://github.com/apps/payobvio-github-app/installations/new`;
       window.location.href = installationUrl;
     } else {
-      router.push('/profile');
+      router.push('/?type=select-wallet');
     }
   };
   const options = [
