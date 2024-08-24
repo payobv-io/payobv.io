@@ -53,7 +53,7 @@ model RepositoryUser {
   createdAt     DateTime @default(now())
   deletedAt     DateTime?
 
-  @@unique([userId, repositoryId]) 
+  @@unique([userId, repositoryId, role]) 
 }
 
 model Bounty {
