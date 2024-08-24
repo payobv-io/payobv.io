@@ -30,7 +30,7 @@ export const options: AuthOptions = {
   callbacks: {
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) {
-        return `${baseUrl}/api/install-github-app`;
+        return `${baseUrl}?type=select-role`;
       }
       return baseUrl;
     },

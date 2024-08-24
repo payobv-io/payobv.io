@@ -5,10 +5,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon, Github } from 'lucide-react';
 import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Component() {
   const [isHovered, setIsHovered] = useState(false);
+  const searchParams = useSearchParams();
+  const searchParamsValue = searchParams.get('type');
 
   const handleSignIn = () => {
     signIn('github');
@@ -25,10 +28,22 @@ export default function Component() {
             </h1>
           </div>
           <div className="flex justify-center space-x-4 mb-6">
-            <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
+            <div
+              className={`w-8 h-8 rounded-full ${
+                searchParamsValue === 'select-role'
+                  ? 'bg-gray-200 text-gray-400'
+                  : 'bg-blue-500 text-white'
+              } flex items-center justify-center font-semibold`}
+            >
               1
             </div>
-            <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-semibold">
+            <div
+              className={`w-8 h-8 rounded-full ${
+                searchParamsValue === 'select-role'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 text-gray-400'
+              } flex items-center justify-center font-semibold`}
+            >
               2
             </div>
           </div>
