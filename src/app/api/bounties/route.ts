@@ -3,16 +3,18 @@ import { bountyCreateSchema } from '@/lib/validations';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const response = bountyCreateSchema.safeParse(req.body);
+  const responseData = await req.json();
+  const parsedResponse = bountyCreateSchema.safeParse(responseData);
 
-  if(!response.success){
+  if(!parsedResponse.success){
+    console.error(parsedResponse.error)
     return NextResponse.json(
       { message: "Invalid data" }, 
       { status: 400 }
     );
   }
 
-  const data = response.data;
+  const data = parsedResponse.data;
   
   // Create Bounty Record
   const bounty = await db.bounty.create({
