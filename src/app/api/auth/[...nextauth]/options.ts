@@ -22,6 +22,7 @@ const githubConfig: OAuthConfig = {
 
 const addUserData = async (profile: GithubUser) => {
   const userProfile = profile as GithubUser;
+  console.log('userProfile', userProfile);
   const existingUser = await db.user.findUnique({
     where: { id: userProfile.id },
   });
