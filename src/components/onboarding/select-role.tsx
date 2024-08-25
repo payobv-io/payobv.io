@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 
-export const ChooseRole = () => {
+export const SelectRole = () => {
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
 
   const router = useRouter();
