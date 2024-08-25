@@ -19,7 +19,7 @@ export const SignInWithGithub = () => {
         className="w-full py-6 text-lg font-semibold"
       >
         <Github className="h-5 w-5 mr-2" />
-        Sign in with GitHub
+        Connect GitHub
         <ArrowRightIcon className="h-5 w-5 ml-2" />
       </Button>
       <motion.div

@@ -9,10 +9,6 @@ export async function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
-  // if (token && pathname === '/' && !searchParams.toString()) {
-  //   return NextResponse.redirect(new URL('/profile', req.url));
-  // }
-
   if (!token && pathname !== '/') {
     return NextResponse.redirect(new URL('/', req.url));
   }
@@ -20,4 +16,4 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = { matcher: ['/', '/profile', '/maintainer/:path*'] };
+export const config = { matcher: ['/', '/maintainer/:path*'] };

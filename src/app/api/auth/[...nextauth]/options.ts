@@ -1,4 +1,4 @@
-import {db} from '@/db/db';
+import { db } from '@/db/db';
 import { findExistingUser } from '@/lib/actions';
 
 import type { AuthOptions } from 'next-auth';
@@ -67,7 +67,7 @@ export const options: AuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) {
-        return `${baseUrl}?type=select-wallet`;
+        return `${baseUrl}/onboarding?type=select-wallet`;
       }
       return baseUrl;
     },
