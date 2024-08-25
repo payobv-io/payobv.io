@@ -1,4 +1,6 @@
-import db from '@/db/db';
+import {db} from '@/db/db';
+import { findExistingUser } from '@/lib/actions';
+
 import type { AuthOptions } from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 
@@ -22,10 +24,7 @@ const githubConfig: OAuthConfig = {
 
 const addUserData = async (profile: GithubUser) => {
   const userProfile = profile as GithubUser;
-  console.log('userProfile', userProfile);
-  const existingUser = await db.user.findUnique({
-    where: { id: userProfile.id },
-  });
+  const existingUser = await findExistingUser(userProfile.id);
 
   if (!existingUser) {
     try {
