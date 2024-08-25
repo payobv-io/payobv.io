@@ -1,15 +1,15 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, RepositoryUserRole } from '@prisma/client';
 
 const prismaClientSingleton = () => {
-  return new PrismaClient({ log: ['query'] })
-}
+  return new PrismaClient({ log: ['query'] });
+};
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
 } & typeof global;
 
-const db = globalThis.prismaGlobal ?? prismaClientSingleton()
+const db = globalThis.prismaGlobal ?? prismaClientSingleton();
 
-export default db
+export { db, RepositoryUserRole };
 
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = db
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = db;
