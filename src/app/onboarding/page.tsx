@@ -4,6 +4,7 @@ import { SelectWallet } from '@/components/onboarding/select-wallet';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { findExistingUser } from '@/lib/actions';
+import { RepositoryUserRole } from '@prisma/client';
 import { Github } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
@@ -22,7 +23,12 @@ export default async function Page({ searchParams }: any) {
       const hasRole = !!user.initialRepositoryRole;
 
       if (hasWallets && hasRole) {
-        return redirect('/profile');
+        console.log(user.initialRepositoryRole);
+        if (user.initialRepositoryRole == RepositoryUserRole.MAINTAINER) {
+          return redirect('/maintainer/dashboard');
+        } else {
+          return redirect('/profile');
+        }
       }
       if (validTypes.includes(searchParamsValue)) {
         if (searchParamsValue === 'select-role' && !hasWallets) {
