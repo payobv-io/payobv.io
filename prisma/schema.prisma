@@ -11,16 +11,16 @@ datasource db {
 }
 
 model User {
-  id   Int      @id // Same as the GitHub user ID
-  githubId  String   @unique
-  email     String   @unique
+  id                    Int @id // Same as the GitHub user ID
+  githubId              String  @unique
+  email                 String? @unique
   initialRepositoryRole RepositoryUserRole?
-  role      UserRole     @default(USER)
-  joinedAt DateTime @default(now())
-  wallets Wallet[]
-  RepositoryUser RepositoryUser[]
-  authoredBounties Bounty[] @relation("AuthorBounties")
-  receivedBounties Bounty[] @relation("ReceivedBounties")
+  role                  UserRole @default(USER)
+  joinedAt              DateTime @default(now())
+  wallets               Wallet[]
+  RepositoryUser        RepositoryUser[]
+  authoredBounties      Bounty[] @relation("AuthorBounties")
+  receivedBounties      Bounty[] @relation("ReceivedBounties")
 
   @@index([githubId])
 }
