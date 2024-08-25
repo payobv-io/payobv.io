@@ -1,4 +1,4 @@
-import db from '@/db/db';
+import { db } from '@/db/db';
 import { bountyCreateSchema } from '@/lib/validations';
 import { NextRequest, NextResponse } from 'next/server';
 
