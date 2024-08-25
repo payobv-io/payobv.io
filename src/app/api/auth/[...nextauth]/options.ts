@@ -62,6 +62,9 @@ export const options: AuthOptions = {
       }
       return token;
     },
+    async session({ session, token }) {
+      return { ...session, token: token };
+    },
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) {
         return `${baseUrl}?type=select-wallet`;

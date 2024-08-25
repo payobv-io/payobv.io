@@ -3,13 +3,31 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletButton } from '../solana/solana-provider';
 
-import { signOut } from 'next-auth/react';
+import { AddWallet } from '@/lib/actions';
+import { signOut, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 import { Button } from '../ui/button';
 import { AppHero } from '../ui/ui-layout';
 import { AccountBalance, AccountButtons } from './account-ui';
 
 export default function AccountListFeature() {
   const { publicKey, connected } = useWallet();
+
+  const { data: session } = useSession();
+  const token = (session as any)?.token;
+
+  useEffect(() => {
+    const createWallet = async () => {
+      if (publicKey) {
+        console.log('publicKey', publicKey);
+        AddWallet({ publicAddress: publicKey.toString(), userID: token?.sub });
+      }
+    };
+
+    createWallet();
+  }, [publicKey, session, token]);
+
+
 
   return (
     <>
