@@ -14,7 +14,7 @@ export default async function Page({ searchParams }: any) {
   const session = await getServerSession(options);
   if (session) {
     const token = (session as any)?.token;
-    const user = await findExistingUser(token?.sub);
+    const user = await findExistingUser(parseInt(token?.sub));
 
     if (user) {
       const hasWallets = user.wallets.length > 0;
