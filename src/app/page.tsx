@@ -2,10 +2,45 @@ import { SelectRole } from '@/components/onboarding/select-role';
 import { SelectWallet } from '@/components/onboarding/select-wallet';
 import { SignInWithGithub } from '@/components/onboarding/sign-in-with-github';
 import { Card, CardContent } from '@/components/ui/card';
-import { Github } from 'lucide-react';
 
-export default function Page({ searchParams }: any) {
+import { findExistingUser } from '@/lib/actions';
+import { Github } from 'lucide-react';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { options } from './api/auth/[...nextauth]/options';
+
+export default async function Page({ searchParams }: any) {
   const searchParamsValue = searchParams?.type;
+  const session = await getServerSession(options);
+  if (session) {
+    const token = (session as any)?.token;
+    const user = await findExistingUser(token?.sub);
+
+    if (user) {
+      const hasWallets = user.wallets.length > 0;
+      const hasRole = !!user.initialRepositoryRole;
+
+      if (hasWallets && hasRole) {
+        return redirect('/profile');
+      }
+
+      if (searchParamsValue === 'select-role' && !hasWallets) {
+        return redirect('/?type=select-wallet');
+      }
+
+      if (searchParamsValue === 'select-wallet' && hasWallets) {
+        return redirect('/?type=select-role');
+      }
+
+      if (!searchParamsValue) {
+        return redirect(
+          `/?type=${hasWallets ? 'select-role' : 'select-wallet'}`
+        );
+      }
+    }
+  } else if (searchParamsValue) {
+    return redirect('/');
+  }
 
   return (
     <>
@@ -54,7 +89,6 @@ export default function Page({ searchParams }: any) {
               </>
             ) : (
               <>
-                {' '}
                 {searchParamsValue === 'select-role' ? (
                   <>
                     <h2 className="text-xl font-semibold text-gray-700 text-center mb-6">
