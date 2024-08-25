@@ -31,7 +31,7 @@ export const SelectWallet = () => {
         await AddWallet({
           publicAddress: publicKey!.toString(),
         });
-        router.push('/?type=select-role');
+        router.push('/onboarding?type=select-role');
       }
     };
 
