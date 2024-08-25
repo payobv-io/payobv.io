@@ -1,4 +1,4 @@
-import db from "@/db/db";
+import { db } from "@/db/db";
 import { installationCreateSchema, installationDeleteSchema } from "@/lib/validations";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
