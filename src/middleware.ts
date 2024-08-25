@@ -7,11 +7,11 @@ import { NextResponse } from 'next/server';
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-  const { pathname, searchParams } = req.nextUrl;
+  const { pathname } = req.nextUrl;
 
-  if (token && pathname === '/' && !searchParams.toString()) {
-    return NextResponse.redirect(new URL('/profile', req.url));
-  }
+  // if (token && pathname === '/' && !searchParams.toString()) {
+  //   return NextResponse.redirect(new URL('/profile', req.url));
+  // }
 
   if (!token && pathname === '/profile') {
     return NextResponse.redirect(new URL('/', req.url));
