@@ -1,6 +1,7 @@
 'use client';
 
 import { LogInIcon, UserPlusIcon } from 'lucide-react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 
@@ -18,7 +19,9 @@ export const AuthenticationButton = () => {
         Sign Up
       </Button>
       <Button
-        onClick={() => {}}
+        onClick={() => {
+          signIn('github');
+        }}
         variant="outline"
         className="w-full py-6 text-lg font-semibold text-gray-900 border-gray-900 hover:bg-gray-100 transition-colors duration-300"
       >

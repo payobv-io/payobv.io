@@ -1,6 +1,6 @@
+import { SignInWithGithub } from '@/components/onboarding/connect-github';
 import { SelectRole } from '@/components/onboarding/select-role';
 import { SelectWallet } from '@/components/onboarding/select-wallet';
-import { SignInWithGithub } from '@/components/onboarding/sign-in-with-github';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { findExistingUser } from '@/lib/actions';
@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation';
 import { options } from '../api/auth/[...nextauth]/options';
 
 export default async function Page({ searchParams }: any) {
+  const validTypes = ['select-role', 'select-wallet'];
   const searchParamsValue = searchParams?.type;
   const session = await getServerSession(options);
   if (session) {
@@ -23,13 +24,22 @@ export default async function Page({ searchParams }: any) {
       if (hasWallets && hasRole) {
         return redirect('/profile');
       }
+      if (validTypes.includes(searchParamsValue)) {
+        if (searchParamsValue === 'select-role' && !hasWallets) {
+          return redirect('/onboarding?type=select-wallet');
+        }
 
-      if (searchParamsValue === 'select-role' && !hasWallets) {
-        return redirect('/onboarding?type=select-wallet');
-      }
+        if (searchParamsValue === 'select-wallet' && hasWallets) {
+          return redirect('/onboarding?type=select-role');
+        }
+      } else {
+        if (!hasWallets) {
+          return redirect('/onboarding?type=select-wallet');
+        }
 
-      if (searchParamsValue === 'select-wallet' && hasWallets) {
-        return redirect('/onboarding?type=select-role');
+        if (!hasRole) {
+          return redirect('/onboarding?type=select-role');
+        }
       }
 
       if (!searchParamsValue) {
