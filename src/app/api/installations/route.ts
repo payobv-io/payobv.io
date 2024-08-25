@@ -27,6 +27,9 @@ async function deleteRepositories(data: z.infer<typeof installationDeleteSchema>
     })
 
     return deleteResult.count
+  }, {
+    maxWait: 5000,
+    timeout: 10000
   })
 }
 
@@ -39,7 +42,7 @@ async function createRepositories(data: z.infer<typeof installationCreateSchema>
 
   return db.$transaction(async (transaction) => {
     // create the Repository entries
-    const newRepositories = await transaction.repository.createManyAndReturn({
+    const newRepositories = await transaction.repository.createMany({
       data: repositories.map((repo) => ({
         id: repo.id,
         name: repo.name,
@@ -51,41 +54,47 @@ async function createRepositories(data: z.infer<typeof installationCreateSchema>
 
     // create the RepositoryUser entries
     await transaction.repositoryUser.createMany({
-      data: newRepositories.map((repo) => ({
+      data: repositories.map((repo) => ({
         repositoryId: repo.id,
         userId: userId,
       })),
       skipDuplicates: true
     })
 
-    return newRepositories.length
+    return newRepositories.count
+  }, {
+    maxWait: 5000,
+    timeout: 10000
   })
 }
 
 export async function POST(req: NextRequest) {
-  const response = installationCreateSchema.safeParse(req.body);
+  const responseData = await req.json();
+  const parsedResponse = installationCreateSchema.safeParse(responseData);
 
-  if(!response.success){
+  if(!parsedResponse.success){
+    console.error(parsedResponse.error)
     return NextResponse.json(
       { message: "Invalid data" }, 
       { status: 400 }
     );
   }
 
-  const data = response.data;
+  const data = parsedResponse.data;
 
   /**
    * 1. Create Repositories
    * 2. Create Repository Users
    */
   try {
-    const repositoryUsers = await createRepositories(data);
+    const addedCount = await createRepositories(data);
 
     return NextResponse.json(
-      { message: `${repositoryUsers} repositories Details Added to the Database. ` }, 
+      { count: addedCount }, 
       { status: 200 }
     );
   } catch (error) {
+    console.error(`Error adding repositories: ${error}`)
     return NextResponse.json(
       { message: "Failed to create installation" }, 
       { status: 500 }
@@ -94,25 +103,28 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const response = installationDeleteSchema.safeParse(req.body);
+  const responseData = await req.json();
+  const parsedResponse = installationDeleteSchema.safeParse(responseData);
 
-  if(!response.success){
+  if(!parsedResponse.success){
+    console.error(parsedResponse.error)
     return NextResponse.json(
       { message: "Invalid data" }, 
       { status: 400 }
     );
   }
 
-  const data = response.data;
+  const data = parsedResponse.data;
 
   try {
     const deletedCount = await deleteRepositories(data);
 
     return NextResponse.json(
-      { message: `${deletedCount} repositories removed from database` }, 
+      { count: deletedCount }, 
       { status: 200 }
     );
   } catch (error) {
+    console.error(`Error deleting repositories: ${error}`)
     return NextResponse.json(
       { message: "Failed to delete installation" }, 
       { status: 500 }
