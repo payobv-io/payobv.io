@@ -2,6 +2,7 @@ import { EscrowRequestFromDb } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../dialog";
 import { Button } from "../button";
 import { CheckIcon, XIcon } from "lucide-react";
+import { acceptBountyEscrow, rejectBountyEscrow } from "@/lib/actions";
 
 type DialogProps = {
   open: boolean;
@@ -31,15 +32,23 @@ export default function ConfirmationDialog({
               </DialogHeader>
               {
               selectedRequest 
-              ? <RequestDetail request={selectedRequest} />
+              ? 
+                <>
+                  <RequestDetail request={selectedRequest} />
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    <Button 
+                      onClick={() => {
+                        acceptBountyEscrow(selectedRequest.id)
+                        setDialogOpen(false)
+                      }}
+                      className="bg-green-600 hover:bg-green-700 text-white">
+                      <CheckIcon className="mr-2 h-4 w-4" /> Approve
+                    </Button>
+                  </DialogFooter>
+                </>
               : undefined
               }
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-                <Button className="bg-green-600 hover:bg-green-700 text-white">
-                  <CheckIcon className="mr-2 h-4 w-4" /> Approve
-                </Button>
-              </DialogFooter>
             </>
           : 
           <>
@@ -51,15 +60,23 @@ export default function ConfirmationDialog({
             </DialogHeader>
             {
               selectedRequest 
-              ? <RequestDetail request={selectedRequest} />
+              ? 
+                <>
+                  <RequestDetail request={selectedRequest} />
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
+                    <Button
+                      onClick={() => {
+                        rejectBountyEscrow(selectedRequest.id)
+                        setDialogOpen(false)
+                      }} 
+                      className="bg-red-600 hover:bg-red-700 text-white">
+                      <XIcon className="mr-2 h-4 w-4" /> Reject
+                    </Button>
+                  </DialogFooter>
+                </>
               : undefined
             }
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button className="bg-red-600 hover:bg-red-700 text-white">
-                <XIcon className="mr-2 h-4 w-4" /> Reject
-              </Button>
-            </DialogFooter>
           </>
         }
       </DialogContent>
