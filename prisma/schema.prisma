@@ -34,7 +34,7 @@ model Wallet {
 
 model Repository {
   id            Int   @id   // Same as the GitHub repository ID 
-  name          String 
+  name          String      // Repository full name (owner/name)
   installationId Int
   isPrivate     Boolean
   createdAt     DateTime @default(now())
@@ -57,6 +57,7 @@ model RepositoryUser {
 
 model Bounty {
   id               Int   @id @default(autoincrement())
+  title            String // Issue title
   author           User     @relation("AuthorBounties", fields: [authorId], references: [id])
   authorId         Int
   receiver         User?    @relation("ReceivedBounties", fields: [receiverId], references: [id])

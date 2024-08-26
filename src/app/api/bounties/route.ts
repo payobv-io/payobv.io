@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
         connect: { id: data.repositoryId }
       },
       issueNumber: data.issueNumber,
+      title: data.title,
       amount: data.bounty
     }
   });
