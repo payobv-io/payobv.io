@@ -1,5 +1,5 @@
 {
-  "address": "Bo9Nd6FuheXnZoPx19s4uWwSjuLct3nHnZ7ZjrKdSUGS",
+  "address": "3wDr7MnhhEKuuPD7jurhfpSpUW53ictFKgFH1mLu9zJu",
   "metadata": {
     "name": "payobvio_solana_program",
     "version": "0.1.0",
@@ -7,36 +7,6 @@
     "description": "Created with Anchor"
   },
   "instructions": [
-    {
-      "name": "assign_contributor",
-      "discriminator": [
-        191,
-        42,
-        156,
-        8,
-        11,
-        20,
-        89,
-        218
-      ],
-      "accounts": [
-        {
-          "name": "maintainer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "escrow_account",
-          "writable": true
-        }
-      ],
-      "args": [
-        {
-          "name": "contributor",
-          "type": "pubkey"
-        }
-      ]
-    },
     {
       "name": "close_escrow",
       "discriminator": [
@@ -241,11 +211,6 @@
       "code": 6001,
       "name": "InvalidDepositAmount",
       "msg": "The deposit amount does not match the bounty amount"
-    },
-    {
-      "code": 6002,
-      "name": "InvalidContributor",
-      "msg": "The contributor does not match the assigned contributor"
     }
   ],
   "types": [
@@ -256,10 +221,6 @@
         "fields": [
           {
             "name": "maintainer",
-            "type": "pubkey"
-          },
-          {
-            "name": "contributor",
             "type": "pubkey"
           },
           {
@@ -291,9 +252,6 @@
           },
           {
             "name": "Funded"
-          },
-          {
-            "name": "Assigned"
           },
           {
             "name": "Completed"
