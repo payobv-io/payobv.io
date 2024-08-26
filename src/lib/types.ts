@@ -9,13 +9,14 @@ export type NavLink = {
 
 export type EscrowRequestFromDb = {
   id: number
+  title: string
   issueNumber: number
   repositoryId: number
   repository: {
     name: string
   }
   amount: number
-  status: BountyStatus
+  createdAt: Date
 }
 
 export type PaidBountyDetails = {
