@@ -11,7 +11,6 @@ type NavLinksProps = {
 
 export default function NavLinks({ links }: NavLinksProps) {
   const pathname = usePathname()
-  console.log(pathname, links)
   return (
     <>
       {links.map((link) => {
