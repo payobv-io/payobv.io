@@ -102,8 +102,9 @@ async function getEscrowDetail(bountyId: number){
  * @summary
  * This function accepts the bounty escrow request
  * 1. Fetch the escrow detail
- * 2. Send a fetch request to the github-app
- * 3. Update the bounty status to OPEN
+ * 2. TODO: Check the wallet balance
+ * 3. Send a fetch request to the github-app
+ * 4. Update the bounty status to OPEN
  */
 export async function acceptBountyEscrow(bountyId: number) {
   try {

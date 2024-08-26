@@ -11,6 +11,7 @@ type DialogProps = {
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+// TODO: Check the wallet balance before accepting the escrow request
 export default function ConfirmationDialog({
   open,
   type,
