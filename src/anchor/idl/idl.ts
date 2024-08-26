@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/payobvio_solana_program.json`.
  */
 export type PayobvioSolanaProgram = {
-  "address": "Bo9Nd6FuheXnZoPx19s4uWwSjuLct3nHnZ7ZjrKdSUGS",
+  "address": "3wDr7MnhhEKuuPD7jurhfpSpUW53ictFKgFH1mLu9zJu",
   "metadata": {
     "name": "payobvioSolanaProgram",
     "version": "0.1.0",
@@ -13,36 +13,6 @@ export type PayobvioSolanaProgram = {
     "description": "Created with Anchor"
   },
   "instructions": [
-    {
-      "name": "assignContributor",
-      "discriminator": [
-        191,
-        42,
-        156,
-        8,
-        11,
-        20,
-        89,
-        218
-      ],
-      "accounts": [
-        {
-          "name": "maintainer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "escrowAccount",
-          "writable": true
-        }
-      ],
-      "args": [
-        {
-          "name": "contributor",
-          "type": "pubkey"
-        }
-      ]
-    },
     {
       "name": "closeEscrow",
       "discriminator": [
@@ -247,11 +217,6 @@ export type PayobvioSolanaProgram = {
       "code": 6001,
       "name": "invalidDepositAmount",
       "msg": "The deposit amount does not match the bounty amount"
-    },
-    {
-      "code": 6002,
-      "name": "invalidContributor",
-      "msg": "The contributor does not match the assigned contributor"
     }
   ],
   "types": [
@@ -262,10 +227,6 @@ export type PayobvioSolanaProgram = {
         "fields": [
           {
             "name": "maintainer",
-            "type": "pubkey"
-          },
-          {
-            "name": "contributor",
             "type": "pubkey"
           },
           {
@@ -297,9 +258,6 @@ export type PayobvioSolanaProgram = {
           },
           {
             "name": "funded"
-          },
-          {
-            "name": "assigned"
           },
           {
             "name": "completed"
