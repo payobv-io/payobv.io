@@ -3,6 +3,7 @@ import { z } from "zod";
 export const bountyCreateSchema = z.object({
   bounty: z.number(),
   issueNumber: z.number(),
+  title: z.string(),
   authorId: z.number(),
   repositoryId: z.number(),
 })
