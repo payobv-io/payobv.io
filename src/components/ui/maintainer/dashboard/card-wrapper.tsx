@@ -1,6 +1,6 @@
 import { getPaidBountyDetails, getTotalMoneySpent, totalRepositories } from "@/lib/data"
 import { BookIcon, CheckCircleIcon, DollarSignIcon, UsersIcon } from "lucide-react"
-import StatCard from "./stat-card"
+import StatCard from "../../stat-card"
 
 type CardWrapperProps = {
   userId: number

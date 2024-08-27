@@ -3,7 +3,7 @@ import { initializeEscrowDeposit } from '@/lib/escrow-transactions';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { EscrowRequestFromDb } from '@/lib/types';
 import { CheckIcon, XIcon } from 'lucide-react';
-import { Button } from '../button';
+import { Button } from '../../button';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../dialog';
-import { useToast } from '../use-toast';
+} from '../../dialog';
+import { useToast } from '../../use-toast';
 
 type DialogProps = {
   open: boolean;

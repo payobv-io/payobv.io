@@ -1,5 +1,5 @@
-import EscrowRequestTable from "@/components/ui/escrow-requests/table";
-import WalletCard from "@/components/ui/escrow-requests/wallet-card";
+import EscrowRequestTable from "@/components/ui/maintainer/escrow-requests/table";
+import WalletCard from "@/components/ui/maintainer/escrow-requests/wallet-card";
 
 export default function Page() {
   return (

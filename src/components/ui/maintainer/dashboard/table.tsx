@@ -1,23 +1,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getRecentBounties } from "@/lib/data";
-import { Badge, BadgeProps } from "../badge";
-import { BountyStatus } from "@prisma/client";
+import { Badge } from "../../badge";
 import { createLinkToIssue } from "@/lib/utils";
-import EmptyState from "../empty-state";
+import EmptyState from "../../empty-state";
 import { SearchIcon } from "lucide-react";
+import { bountyVariants } from "@/lib/constants";
 
 type BountyTableProps = React.ComponentPropsWithRef<"table"> &
 {
   userId: number
-}
-
-const bountyVariants: {
-  [key in BountyStatus]: BadgeProps["variant"]
-} = {
-  "OPEN" : "default",
-  "PENDING_ESCROW" : "secondary",
-  "COMPLETED" : "success",
-  "CANCELLED" : "alert",
 }
 
 export default async function BountyTable({

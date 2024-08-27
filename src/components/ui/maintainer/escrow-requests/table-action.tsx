@@ -1,7 +1,7 @@
 "use client"
 
 import { EscrowRequestFromDb } from "@/lib/types"
-import { Button } from "../button"
+import { Button } from "../../button"
 import { useState } from "react"
 import ConfirmationDialog from "./confirmation-dialog"
 

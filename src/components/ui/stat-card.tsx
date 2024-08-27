@@ -1,5 +1,5 @@
 import { LockIcon } from "lucide-react";
-import { Card, CardContent } from "../card";
+import { Card, CardContent } from "./card";
 
 type StatCardProps = {
   index: number

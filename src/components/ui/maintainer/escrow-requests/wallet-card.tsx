@@ -2,7 +2,7 @@
 
 import { useGetBalance } from "@/components/account/account-data-access";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Card, CardContent } from "../card";
+import { Card, CardContent } from "../../card";
 import { RefreshCw, WalletIcon } from "lucide-react";
 import { lamportsToSol } from "@/lib/utils";
 

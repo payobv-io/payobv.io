@@ -23,3 +23,18 @@ export type PaidBountyDetails = {
   totalAmount: number
   totalBounties: number
 }
+
+export type ContributionDetails = PaidBountyDetails & {
+  repositoryCount: number
+}
+
+export type ContributedBountyDetail = {
+  id: number,
+  issueNumber: number,
+  title: string,
+  amount: number,
+  signature: string,
+  repository: {
+    name: string
+  }
+}

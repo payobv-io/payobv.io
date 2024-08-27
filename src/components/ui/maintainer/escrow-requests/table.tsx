@@ -1,7 +1,7 @@
 import { getServerSessionID } from '@/lib/actions';
 import { getEscrowRequests } from '@/lib/data';
 import { createLinkToIssue } from '@/lib/utils';
-import { Card } from '../card';
+import { Card } from '../../card';
 import {
   Table,
   TableBody,
@@ -9,10 +9,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../table';
+} from '../../table';
 import TableAction from './table-action';
 import { SearchIcon } from 'lucide-react';
-import EmptyState from '../empty-state';
+import EmptyState from '../../empty-state';
 
 export default async function EscrowRequestTable() {
   const userID = await getServerSessionID();
