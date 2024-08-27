@@ -1,6 +1,6 @@
 'use client';
 
-import { AddWallet } from '@/lib/actions';
+import { addWallet } from '@/lib/actions';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { motion } from 'framer-motion';
@@ -28,7 +28,7 @@ export const SelectWallet = () => {
   useEffect(() => {
     const handleWalletConnection = async () => {
       if (connected) {
-        await AddWallet({
+        await addWallet({
           publicAddress: publicKey!.toString(),
         });
         router.push('/onboarding?type=select-role');

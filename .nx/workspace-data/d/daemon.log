@@ -1,0 +1,11 @@
+[NX Daemon Server] - 2024-08-26T23:47:35.923Z - Started listening on: \\.\pipe\nx\C:\Users\AYIMEN~1.TOA\AppData\Local\Temp\18c1f8c382df061326f5\d.sock
+[NX Daemon Server] - 2024-08-26T23:47:35.925Z - [WATCHER]: Subscribed to changes within: d:\solana\payobv.io (native)
+[NX Daemon Server] - 2024-08-26T23:47:35.937Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-08-26T23:47:35.939Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-08-26T23:47:35.939Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-08-26T23:47:35.940Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-08-26T23:47:35.941Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-08-26T23:47:35.941Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 1.
+[NX Daemon Server] - 2024-08-26T23:47:35.941Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-08-26T23:47:35.941Z - [WATCHER]: Stopping the watcher for d:\solana\payobv.io (sources)
+[NX Daemon Server] - 2024-08-26T23:47:35.941Z - [WATCHER]: Stopping the watcher for d:\solana\payobv.io (outputs)
