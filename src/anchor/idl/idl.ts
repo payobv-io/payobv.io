@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/payobvio_solana_program.json`.
  */
 export type PayobvioSolanaProgram = {
-  "address": "3wDr7MnhhEKuuPD7jurhfpSpUW53ictFKgFH1mLu9zJu",
+  "address": "FB7QEze2Xmxiw4oh1SfM2WyCwEgAY6oY27dbLPQ365HT",
   "metadata": {
     "name": "payobvioSolanaProgram",
     "version": "0.1.0",

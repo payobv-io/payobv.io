@@ -33,7 +33,7 @@ export const findExistingUser = async (userId: number) => {
   }
 };
 
-export async function AddWallet(props: WalletProps) {
+export async function addWallet(props: WalletProps) {
   const isSamePublicAddress = await db.wallet.findUnique({
     where: { publicAddress: props.publicAddress },
   });
@@ -50,7 +50,7 @@ export async function AddWallet(props: WalletProps) {
   }
 }
 
-export async function AddRole(props: RoleProps) {
+export async function addRole(props: RoleProps) {
   var role;
   switch (props.role) {
     case 'contributor':

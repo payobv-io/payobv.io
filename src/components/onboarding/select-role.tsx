@@ -1,6 +1,6 @@
 'use client';
 
-import { AddRole } from '@/lib/actions';
+import { addRole } from '@/lib/actions';
 import { motion } from 'framer-motion';
 import { CodeIcon, WrenchIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ export const SelectRole = () => {
   const router = useRouter();
 
   const chooseRole = async (role: string) => {
-    await AddRole({
+    await addRole({
       role,
     });
     if (role === 'maintainer') {
