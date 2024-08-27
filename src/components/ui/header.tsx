@@ -21,7 +21,7 @@ export default function Header() {
     <header className="bg-white shadow-sm z-10 fixed w-full md:pl-64">
       <div className="max-w-7xl sm:px-6 lg:px-3 flex justify-between items-center md:h-[56px]">
         <div className="flex items-center">
-          <span className="ml-2 font-semibold text-xl text-gray-900">Contributor</span>
+          <span className="ml-2 font-semibold text-xl text-gray-900">Maintainer</span>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

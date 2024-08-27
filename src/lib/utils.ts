@@ -9,3 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 export function lamportsToSol(sol: number) {
   return Math.round((sol / LAMPORTS_PER_SOL) * 100000) / 100000
 }
+
+export function createLinkToIssue(repo: string, issue: number) {
+  const encodedRepo = encodeURIComponent(repo)
+  return `https://github.com/${repo}/issues/${issue}`
+}

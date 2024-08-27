@@ -1,10 +1,21 @@
+import { options } from "@/app/api/auth/[...nextauth]/options";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import CardWrapper from "@/components/ui/dashboard/card-wrapper";
+import BountyTable from "@/components/ui/dashboard/table";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DollarSignIcon, UsersIcon, CheckCircleIcon, GithubIcon, LayoutDashboardIcon, InboxIcon, MenuIcon, TrendingUpIcon, PlusCircleIcon } from "lucide-react"
+import { DollarSignIcon, UsersIcon, CheckCircleIcon, GithubIcon, LayoutDashboardIcon, InboxIcon, MenuIcon, TrendingUpIcon, PlusCircleIcon, BookIcon } from "lucide-react"
+import { getServerSession } from "next-auth";
 
-export default function Page() {
+export default async function Page() {
+
+  const session = await getServerSession(options);
+  const userId = parseInt((session as any)?.token?.sub);
+
+  if (!session || !userId) {
+    return null;
+  }
 
   const stats = [
     {
@@ -16,20 +27,28 @@ export default function Page() {
       description: "From last month",
     },
     {
-      title: "Active Contributors",
-      value: "324",
-      change: "+18",
-      changeType: "positive",
-      icon: UsersIcon,
-      description: "New this week",
-    },
-    {
       title: "Issues Resolved",
       value: "1,234",
       change: "-2.3%",
       changeType: "negative",
       icon: CheckCircleIcon,
       description: "Compared to last week",
+    },
+    {
+      title: "Total Repositories",
+      value: "89",
+      change: "+5",
+      changeType: "positive",
+      icon: BookIcon,
+      description: "Added this month",
+    },
+    {
+      title: "Active Contributors",
+      value: "324",
+      change: "+18",
+      changeType: "positive",
+      icon: UsersIcon,
+      description: "New this week",
     },
   ]
 
@@ -77,53 +96,11 @@ export default function Page() {
           </Button>
         </div>
         
-        <div className="grid gap-6 mb-8 md:grid-cols-3">
-          {stats.map((stat, index) => (
-            <Card key={index} className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-gray-500">{stat.title}</span>
-                  <stat.icon className="h-6 w-6 text-gray-400" />
-                </div>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-semibold text-gray-900">{stat.value}</span>
-                  <span className={`ml-2 text-sm font-medium ${stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'}`}>
-                    {stat.change}
-                  </span>
-                </div>
-                <div className="flex items-center mt-1">
-                  <TrendingUpIcon className={`h-4 w-4 ${stat.changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`} />
-                  <span className="text-xs text-gray-500 ml-1">{stat.description}</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <CardWrapper userId={userId} />
         
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Recent Bounties</h2>
         <Card>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Issue</TableHead>
-                <TableHead>Contributor</TableHead>
-                <TableHead>Bounty</TableHead>
-                <TableHead>Repo</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bounties.map((bounty, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">
-                    {bounty.issue}
-                  </TableCell>
-                  <TableCell>{bounty.contributor}</TableCell>
-                  <TableCell>{bounty.bounty}</TableCell>
-                  <TableCell>{bounty.repo}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <BountyTable userId={userId} />
         </Card>
       </div>
     </main>

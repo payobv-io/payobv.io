@@ -90,11 +90,17 @@ export const getRecentBounties = async (userId: number) => {
       },
       select: {
         id: true,
+        title: true,
         issueNumber: true,
         repositoryId: true,
         amount: true,
         status: true,
         createdAt: true,
+        receiver: {
+          select: {
+            githubId: true
+          }
+        },
         repository: {
           select: {
             name: true
