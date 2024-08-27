@@ -3,6 +3,8 @@ import { getRecentBounties } from "@/lib/data";
 import { Badge, BadgeProps } from "../badge";
 import { BountyStatus } from "@prisma/client";
 import { createLinkToIssue } from "@/lib/utils";
+import EmptyState from "../empty-state";
+import { SearchIcon } from "lucide-react";
 
 type BountyTableProps = React.ComponentPropsWithRef<"table"> &
 {
@@ -36,25 +38,39 @@ export default async function BountyTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {bounties.map((bounty) => (
-          <TableRow key={bounty.id}>
-            <TableCell className="font-medium">
-              <a 
-                href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} 
-                className="text-blue-600 hover:underline"
-                target="_blank"
-              >{bounty.title}</a>
-            </TableCell>
-            <TableCell>{bounty.repository.name}</TableCell>
-            <TableCell>{bounty.receiver?.githubId ?? "-"}</TableCell>
-            <TableCell>{bounty.amount} SOL</TableCell>
-            <TableCell>
-              <Badge variant={bountyVariants[bounty.status]}>
-                {bounty.status}
-              </Badge>
+        {
+          bounties.length > 0 ?
+          bounties.map((bounty) => (
+            <TableRow key={bounty.id}>
+              <TableCell className="font-medium">
+                <a 
+                  href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} 
+                  className="text-blue-600 hover:underline"
+                  target="_blank"
+                >{bounty.title}</a>
+              </TableCell>
+              <TableCell>{bounty.repository.name}</TableCell>
+              <TableCell>{bounty.receiver?.githubId ?? "-"}</TableCell>
+              <TableCell>{bounty.amount} SOL</TableCell>
+              <TableCell>
+                <Badge variant={bountyVariants[bounty.status]}>
+                  {bounty.status}
+                </Badge>
+              </TableCell>
+            </TableRow>
+          ))
+        : (
+          <TableRow>
+            <TableCell colSpan={5} className="text-center">
+              <EmptyState
+                message="No recent bounties found" 
+                icon={SearchIcon}
+              />
             </TableCell>
           </TableRow>
-        ))}
+        )
+
+        }
       </TableBody>
     </Table>
   )

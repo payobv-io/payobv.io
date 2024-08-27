@@ -11,6 +11,8 @@ import {
   TableRow,
 } from '../table';
 import TableAction from './table-action';
+import { SearchIcon } from 'lucide-react';
+import EmptyState from '../empty-state';
 
 export default async function EscrowRequestTable() {
   const userID = await getServerSessionID();
@@ -35,28 +37,41 @@ export default async function EscrowRequestTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {escrowRequests.map((request) => (
-              <TableRow key={request.id}>
-                <TableCell className="font-medium w-[400px]">
-                  <a
-                    href={createLinkToIssue(
-                      request.repository.name,
-                      request.issueNumber
-                    )}
-                    target="_blank"
-                    className="text-blue-600 hover:underline"
-                  >
-                    {request.title}
-                  </a>
-                </TableCell>
-                <TableCell>{request.repository.name}</TableCell>
-                <TableCell>{request.amount} SOL</TableCell>
-                <TableCell>{request.createdAt.toDateString()}</TableCell>
-                <TableCell>
-                  <TableAction request={request} />
+            {
+            escrowRequests.length > 0 ?
+              escrowRequests.map((request) => (
+                <TableRow key={request.id}>
+                  <TableCell className="font-medium w-[400px]">
+                    <a
+                      href={createLinkToIssue(
+                        request.repository.name,
+                        request.issueNumber
+                      )}
+                      target="_blank"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {request.title}
+                    </a>
+                  </TableCell>
+                  <TableCell>{request.repository.name}</TableCell>
+                  <TableCell>{request.amount} SOL</TableCell>
+                  <TableCell>{request.createdAt.toDateString()}</TableCell>
+                  <TableCell>
+                    <TableAction request={request} />
+                  </TableCell>
+                </TableRow>
+              ))
+            : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center">
+                  <EmptyState
+                    message="No escrow requests found, start by creating a bounty in Github" 
+                    icon={SearchIcon}
+                  />
                 </TableCell>
               </TableRow>
-            ))}
+            )
+          }
           </TableBody>
         </Table>
       </Card>
