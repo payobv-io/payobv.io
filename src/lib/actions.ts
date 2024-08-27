@@ -19,10 +19,13 @@ interface AcceptBountyProps {
   escrowAddress: string;
 }
 
-async function getUserSessionID() {
+export async function getServerSessionID(): Promise<number | null> {
   const session = await getServerSession(options);
-  const token = (session as any)?.token;
-  return token?.sub;
+  if (session) {
+    const token = (session as any)?.token;
+    return parseInt(token?.sub);
+  }
+  return null;
 }
 
 export const findExistingUser = async (userId: number) => {
@@ -42,13 +45,13 @@ export async function addWallet(props: WalletProps) {
   const isSamePublicAddress = await db.wallet.findUnique({
     where: { publicAddress: props.publicAddress },
   });
-  const userID = await getUserSessionID();
+  const userID = await getServerSessionID();
   if (!isSamePublicAddress) {
     await db.wallet.create({
       data: {
         publicAddress: props.publicAddress,
         owner: {
-          connect: { id: parseInt(userID) },
+          connect: { id: userID! },
         },
       },
     });
@@ -65,9 +68,9 @@ export async function addRole(props: RoleProps) {
       role = RepositoryUserRole.MAINTAINER;
       break;
   }
-  const userID = await getUserSessionID();
+  const userID = await getServerSessionID();
   await db.user.update({
-    where: { id: parseInt(userID) },
+    where: { id: userID! },
     data: {
       initialRepositoryRole: role,
     },

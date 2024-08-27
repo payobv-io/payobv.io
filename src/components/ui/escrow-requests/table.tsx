@@ -1,19 +1,24 @@
-import { options } from "@/app/api/auth/[...nextauth]/options";
-import { getServerSession } from "next-auth";
-import { Card } from "../card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
-import { getEscrowRequests } from "@/lib/data";
-import TableAction from "./table-action";
+import { getServerSessionID } from '@/lib/actions';
+import { getEscrowRequests } from '@/lib/data';
+import { Card } from '../card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../table';
+import TableAction from './table-action';
 
 export default async function EscrowRequestTable() {
-  const session = await getServerSession(options);
-  const userId = parseInt((session as any)?.token?.sub);
+  const userID = await getServerSessionID();
 
-  if (!session || !userId) {
+  if (!userID) {
     return null;
   }
-  
-  const escrowRequests = await getEscrowRequests(userId);
+
+  const escrowRequests = await getEscrowRequests(userID);
 
   return (
     <>
@@ -32,7 +37,9 @@ export default async function EscrowRequestTable() {
             {escrowRequests.map((request) => (
               <TableRow key={request.id}>
                 <TableCell className="font-medium w-[400px]">
-                  <a href="#" className="text-blue-600 hover:underline">{request.title}</a>
+                  <a href="#" className="text-blue-600 hover:underline">
+                    {request.title}
+                  </a>
                 </TableCell>
                 <TableCell>{request.repository.name}</TableCell>
                 <TableCell>{request.amount} SOL</TableCell>
@@ -46,5 +53,5 @@ export default async function EscrowRequestTable() {
         </Table>
       </Card>
     </>
-  )
+  );
 }

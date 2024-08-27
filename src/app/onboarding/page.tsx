@@ -3,20 +3,17 @@ import { SelectRole } from '@/components/onboarding/select-role';
 import { SelectWallet } from '@/components/onboarding/select-wallet';
 import { Card, CardContent } from '@/components/ui/card';
 
-import { findExistingUser } from '@/lib/actions';
+import { findExistingUser, getServerSessionID } from '@/lib/actions';
 import { RepositoryUserRole } from '@prisma/client';
 import { Github } from 'lucide-react';
-import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { options } from '../api/auth/[...nextauth]/options';
 
 export default async function Page({ searchParams }: any) {
   const validTypes = ['select-role', 'select-wallet'];
   const searchParamsValue = searchParams?.type;
-  const session = await getServerSession(options);
-  if (session) {
-    const token = (session as any)?.token;
-    const user = await findExistingUser(parseInt(token?.sub));
+  const sessionID = await getServerSessionID();
+  if (sessionID) {
+    const user = await findExistingUser(sessionID);
 
     if (user) {
       const hasWallets = user.wallets.length > 0;
