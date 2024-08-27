@@ -16,6 +16,7 @@ interface RoleProps {
 interface AcceptBountyProps {
   bountyId: number;
   transactionSignature: string;
+  escrowAddress: string;
 }
 
 async function getUserSessionID() {
@@ -114,6 +115,7 @@ async function getEscrowDetail(bountyId: number) {
 export async function acceptBountyEscrow({
   bountyId,
   transactionSignature,
+  escrowAddress,
 }: AcceptBountyProps) {
   try {
     const detail = await getEscrowDetail(bountyId);
@@ -143,6 +145,15 @@ export async function acceptBountyEscrow({
       where: { id: bountyId },
       data: {
         status: BountyStatus.OPEN,
+        signature: transactionSignature,
+        escrow: {
+          create: {
+            accountAddress: escrowAddress,
+          },
+        },
+      },
+      include: {
+        escrow: true,
       },
     });
 

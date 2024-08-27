@@ -29,7 +29,14 @@ type InitEscrowProps = {
   bountyAmount: number;
 };
 
-async function InitializeEscrowDeposit(props: InitEscrowProps) {
+type EscrowDepositResult = {
+  escrowAddress: PublicKey;
+  transactionSignature: string | null;
+};
+
+async function InitializeEscrowDeposit(
+  props: InitEscrowProps
+): Promise<EscrowDepositResult> {
   const program = getProgram(props.wallet);
   const [escrowAccount] = PublicKey.findProgramAddressSync(
     [Buffer.from('escrow'), Buffer.from(props.issueId.toString())],
@@ -60,6 +67,7 @@ async function InitializeEscrowDeposit(props: InitEscrowProps) {
   };
 
   try {
+    let depositTx: string | null = null;
     if (!escrowAccountExists) {
       // Initialize the escrow account
       const initTx = await program.methods
@@ -75,21 +83,27 @@ async function InitializeEscrowDeposit(props: InitEscrowProps) {
 
     if (escrowAccountDetails!.state.funded === undefined) {
       // Deposit funds into the escrow account
-      const depositTx = await program.methods
+      depositTx = await program.methods
         .depositFunds(bountyAmountLamports)
         .accounts(commonAccounts)
         .rpc();
       console.log('Deposit transaction signature:', depositTx);
       console.log('Funds deposited successfully');
-
-      return depositTx;
     }
+
+    return {
+      escrowAddress: escrowAccount,
+      transactionSignature: depositTx,
+    };
   } catch (err: any) {
     if (err instanceof Error) {
       if (err.message.includes('User rejected the request')) {
         console.log('Transaction was rejected by the user');
         // TODO: Handle transaction rejection (show toast or alert)
-        return;
+        return {
+          escrowAddress: escrowAccount,
+          transactionSignature: null,
+        };
       }
     }
 
@@ -130,17 +144,21 @@ export default function ConfirmationDialog({
                   </Button>
                   <Button
                     onClick={async () => {
-                      const transactionSignature =
-                        await InitializeEscrowDeposit({
+                      const escrowDepositResult = await InitializeEscrowDeposit(
+                        {
                           wallet: wallet,
                           issueId: selectedRequest.issueNumber,
                           bountyAmount: selectedRequest.amount,
-                        });
+                        }
+                      );
 
-                      if (transactionSignature) {
+                      if (escrowDepositResult.transactionSignature) {
                         acceptBountyEscrow({
                           bountyId: selectedRequest.id,
-                          transactionSignature: transactionSignature,
+                          transactionSignature:
+                            escrowDepositResult.transactionSignature!,
+                          escrowAddress:
+                            escrowDepositResult.escrowAddress.toString(),
                         });
                       }
 
