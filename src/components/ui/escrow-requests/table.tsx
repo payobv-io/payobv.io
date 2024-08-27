@@ -1,5 +1,6 @@
 import { getServerSessionID } from '@/lib/actions';
 import { getEscrowRequests } from '@/lib/data';
+import { createLinkToIssue } from '@/lib/utils';
 import { Card } from '../card';
 import {
   Table,
@@ -37,7 +38,14 @@ export default async function EscrowRequestTable() {
             {escrowRequests.map((request) => (
               <TableRow key={request.id}>
                 <TableCell className="font-medium w-[400px]">
-                  <a href="#" className="text-blue-600 hover:underline">
+                  <a
+                    href={createLinkToIssue(
+                      request.repository.name,
+                      request.issueNumber
+                    )}
+                    target="_blank"
+                    className="text-blue-600 hover:underline"
+                  >
                     {request.title}
                   </a>
                 </TableCell>

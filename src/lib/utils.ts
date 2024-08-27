@@ -13,3 +13,8 @@ export function lamportsToSol(sol: number) {
 export function solToLamports(sol: number) {
   return sol * LAMPORTS_PER_SOL;
 }
+
+export function createLinkToIssue(repo: string, issue: number) {
+  const encodedRepo = encodeURIComponent(repo)
+  return `https://github.com/${repo}/issues/${issue}`
+}

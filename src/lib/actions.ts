@@ -83,9 +83,7 @@ async function getEscrowDetail(bountyId: number) {
     where: { id: bountyId },
   });
 
-  const user = await db.user.findUnique({
-    where: { id: bounty?.authorId },
-  });
+  const user = await findExistingUser(bounty?.authorId!);
   const githubId = user?.githubId;
   const repository = await db.repository.findUnique({
     where: { id: bounty?.repositoryId },
