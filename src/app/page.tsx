@@ -1,8 +1,12 @@
 import { AuthenticationButton } from '@/components/onboarding/authentication-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { CodeIcon, DollarSignIcon, Github } from 'lucide-react';
+import { checkRootPageAccess } from '@/lib/actions';
 
 export default async function Page() {
+  // Check if the user is already authenticated and complete the onboarding process
+  await checkRootPageAccess();
+
   return (
     <>
       <div className="flex min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
