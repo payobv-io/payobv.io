@@ -1,5 +1,5 @@
 import { acceptBountyEscrow, rejectBountyEscrow } from '@/lib/actions';
-import { InitializeEscrowDeposit } from '@/lib/escrow-transactions';
+import { initializeEscrowDeposit } from '@/lib/escrow-transactions';
 import { EscrowRequestFromDb } from '@/lib/types';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { CheckIcon, XIcon } from 'lucide-react';
@@ -52,7 +52,8 @@ export default function ConfirmationDialog({
                   </Button>
                   <Button
                     onClick={async () => {
-                      const escrowDepositResult = await InitializeEscrowDeposit(
+                      // TODO: If this fails, show a toast.
+                      const escrowDepositResult = await initializeEscrowDeposit(
                         {
                           wallet: wallet,
                           issueId: selectedRequest.issueNumber,
