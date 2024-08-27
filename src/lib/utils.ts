@@ -15,6 +15,9 @@ export function solToLamports(sol: number) {
 }
 
 export function createLinkToIssue(repo: string, issue: number) {
-  const encodedRepo = encodeURIComponent(repo)
   return `https://github.com/${repo}/issues/${issue}`
+}
+
+export function getRepoNameFromFullName(fullname: string) {
+  return fullname.split('/').at(-1);
 }

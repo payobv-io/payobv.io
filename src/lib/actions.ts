@@ -5,6 +5,7 @@ import { BountyStatus, db, RepositoryUserRole } from '@/db/db';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { getRepoNameFromFullName } from './utils';
 
 interface WalletProps {
   publicAddress: string;
@@ -115,7 +116,7 @@ async function getEscrowDetail(bountyId: number) {
     issueNumber: bounty.issueNumber,
     bounty: bounty.amount,
     owner: githubId,
-    repo: repository.name,
+    repo: getRepoNameFromFullName(repository.name),
     installationId: repository.installationId,
   };
 }
@@ -138,6 +139,8 @@ export async function acceptBountyEscrow({
 }: AcceptBountyProps) {
   try {
     const detail = await getEscrowDetail(bountyId);
+
+    console.log("Escrow Detail: ", detail);
 
     // Send fetch request to the github-app
     const response = await fetch(
