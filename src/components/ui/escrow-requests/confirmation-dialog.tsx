@@ -1,5 +1,5 @@
 import { getProgram } from '@/anchor/client';
-import { rejectBountyEscrow } from '@/lib/actions';
+import { acceptBountyEscrow, rejectBountyEscrow } from '@/lib/actions';
 import { EscrowRequestFromDb } from '@/lib/types';
 import { solToLamports } from '@/lib/utils';
 import { BN, web3 } from '@coral-xyz/anchor';
@@ -36,6 +36,22 @@ async function InitializeEscrowDeposit(props: InitEscrowProps) {
     program.programId
   );
 
+  let escrowAccountExists;
+
+  try {
+    // Check if escrow account exists
+    escrowAccountExists = await program.account.escrowAccount.fetch(
+      escrowAccount
+    );
+    console.log('Escrow account already exists', escrowAccountExists);
+  } catch (error: any) {
+    if (!error.message.includes('Account does not exist')) {
+      console.error('Unexpected error while checking escrow account:', error);
+      escrowAccountExists = false;
+      throw error;
+    }
+  }
+
   const bountyAmountLamports = new BN(solToLamports(props.bountyAmount));
   const commonAccounts = {
     maintainer: props.wallet.publicKey,
@@ -44,32 +60,39 @@ async function InitializeEscrowDeposit(props: InitEscrowProps) {
   };
 
   try {
-    await program.account.escrowAccount.fetch(escrowAccount);
-    console.log('Escrow account already exists');
-    return;
-  } catch (error: any) {
-    if (!error.message.includes('Account does not exist')) {
-      console.error('Unexpected error while checking escrow account:', error);
-      throw error;
+    if (!escrowAccountExists) {
+      // Initialize the escrow account
+      const initTx = await program.methods
+        .initializeEscrow(bountyAmountLamports, props.issueId.toString())
+        .accounts(commonAccounts)
+        .rpc();
+      console.log('Initialize transaction signature:', initTx);
     }
-  }
 
-  try {
-    const initTx = await program.methods
-      .initializeEscrow(bountyAmountLamports, props.issueId.toString())
-      .accounts(commonAccounts)
-      .rpc();
-    console.log('Initialize transaction signature:', initTx);
+    const escrowAccountDetails = await program.account.escrowAccount.fetch(
+      escrowAccount
+    );
 
-    const depositTx = await program.methods
-      .depositFunds(bountyAmountLamports)
-      .accounts(commonAccounts)
-      .rpc();
-    console.log('Deposit transaction signature:', depositTx);
+    if (escrowAccountDetails!.state.funded === undefined) {
+      // Deposit funds into the escrow account
+      const depositTx = await program.methods
+        .depositFunds(bountyAmountLamports)
+        .accounts(commonAccounts)
+        .rpc();
+      console.log('Deposit transaction signature:', depositTx);
+      console.log('Funds deposited successfully');
 
-    const escrow = await program.account.escrowAccount.fetch(escrowAccount);
-    console.log('Escrow account details after funding:', escrow);
-  } catch (err) {
+      return depositTx;
+    }
+  } catch (err: any) {
+    if (err instanceof Error) {
+      if (err.message.includes('User rejected the request')) {
+        console.log('Transaction was rejected by the user');
+        // TODO: Handle transaction rejection (show toast or alert)
+        return;
+      }
+    }
+
     console.error('Error during escrow initialization or fund deposit:', err);
     throw err;
   }
@@ -107,12 +130,20 @@ export default function ConfirmationDialog({
                   </Button>
                   <Button
                     onClick={async () => {
-                      await InitializeEscrowDeposit({
-                        wallet: wallet,
-                        issueId: selectedRequest.issueNumber,
-                        bountyAmount: selectedRequest.amount,
-                      });
-                      //acceptBountyEscrow(selectedRequest.id);
+                      const transactionSignature =
+                        await InitializeEscrowDeposit({
+                          wallet: wallet,
+                          issueId: selectedRequest.issueNumber,
+                          bountyAmount: selectedRequest.amount,
+                        });
+
+                      if (transactionSignature) {
+                        acceptBountyEscrow({
+                          bountyId: selectedRequest.id,
+                          transactionSignature: transactionSignature,
+                        });
+                      }
+
                       setDialogOpen(false);
                     }}
                     className="bg-green-600 hover:bg-green-700 text-white"

@@ -3,7 +3,6 @@
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import { BountyStatus, db, RepositoryUserRole } from '@/db/db';
 import { getServerSession } from 'next-auth';
-import { EscrowRequestFromDb } from './types';
 import { revalidatePath } from 'next/cache';
 
 interface WalletProps {
@@ -12,6 +11,11 @@ interface WalletProps {
 
 interface RoleProps {
   role: string;
+}
+
+interface AcceptBountyProps {
+  bountyId: number;
+  transactionSignature: string;
 }
 
 async function getUserSessionID() {
@@ -70,21 +74,21 @@ export async function addRole(props: RoleProps) {
 }
 
 // This function returns the escrow detail to send to the github-app
-async function getEscrowDetail(bountyId: number){
+async function getEscrowDetail(bountyId: number) {
   const bounty = await db.bounty.findUnique({
-    where: { id: bountyId }
-  })
+    where: { id: bountyId },
+  });
 
   const user = await db.user.findUnique({
     where: { id: bounty?.authorId },
-  })
+  });
   const githubId = user?.githubId;
   const repository = await db.repository.findUnique({
-    where: { id: bounty?.repositoryId }
-  })
+    where: { id: bounty?.repositoryId },
+  });
 
-  if(!githubId || !repository || !bounty){
-    throw new Error("Failed to find githubId, repository, or bounty");
+  if (!githubId || !repository || !bounty) {
+    throw new Error('Failed to find githubId, repository, or bounty');
   }
 
   return {
@@ -92,8 +96,8 @@ async function getEscrowDetail(bountyId: number){
     bounty: bounty.amount,
     owner: githubId,
     repo: repository.name,
-    installationId: repository.installationId
-  }
+    installationId: repository.installationId,
+  };
 }
 
 // TODO: Add Escrow Logic
@@ -105,42 +109,49 @@ async function getEscrowDetail(bountyId: number){
  * 2. TODO: Check the wallet balance
  * 3. Send a fetch request to the github-app
  * 4. Update the bounty status to OPEN
+ * 5. Add the transaction signature to the bounty table
  */
-export async function acceptBountyEscrow(bountyId: number) {
+export async function acceptBountyEscrow({
+  bountyId,
+  transactionSignature,
+}: AcceptBountyProps) {
   try {
     const detail = await getEscrowDetail(bountyId);
 
     // Send fetch request to the github-app
-    const response = await fetch("http://localhost:3001/payobvio-github-app/escrow", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "approved",
-        detail
-      })
-    })
-  
+    const response = await fetch(
+      'http://localhost:3001/payobvio-github-app/escrow',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'approved',
+          detail,
+        }),
+      }
+    );
+
     if (!response.ok) {
-      throw new Error("Failed to approve bounty escrow");
+      throw new Error('Failed to approve bounty escrow');
     }
-  
+
     const responseBody = await response.json();
 
     await db.bounty.update({
       where: { id: bountyId },
       data: {
-        status: BountyStatus.OPEN
-      }
-    })
+        status: BountyStatus.OPEN,
+      },
+    });
 
-    console.log("Approved bounty escrow:", responseBody);
-    revalidatePath("/maintainer/escrow-requests");
+    console.log('Approved bounty escrow:', responseBody);
+    revalidatePath('/maintainer/escrow-requests');
 
     // TODO: Redirect to Dashboard
   } catch (error) {
-    console.error("AcceptBountyEscrow Error: ", error);
+    console.error('AcceptBountyEscrow Error: ', error);
   }
 }
 
@@ -157,36 +168,38 @@ export async function rejectBountyEscrow(bountyId: number) {
     const detail = await getEscrowDetail(bountyId);
 
     // Send fetch request to the github-app
-    const response = await fetch("http://localhost:3001/payobvio-github-app/escrow", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "rejected",
-        detail
-      })
-    })
-  
+    const response = await fetch(
+      'http://localhost:3001/payobvio-github-app/escrow',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'rejected',
+          detail,
+        }),
+      }
+    );
+
     if (!response.ok) {
-      throw new Error("Failed to reject bounty escrow");
+      throw new Error('Failed to reject bounty escrow');
     }
-  
+
     const responseBody = await response.json();
 
     await db.bounty.update({
       where: { id: bountyId },
       data: {
-        status: BountyStatus.CANCELLED
-      }
-    })
+        status: BountyStatus.CANCELLED,
+      },
+    });
 
-    console.log("Rejected bounty escrow:", responseBody);
-    revalidatePath("/maintainer/escrow-requests");
+    console.log('Rejected bounty escrow:', responseBody);
+    revalidatePath('/maintainer/escrow-requests');
 
     // TODO: Redirect to Dashboard
-}
-  catch (error) {
-    console.error("RejectBountyEscrow Error: ", error);
+  } catch (error) {
+    console.error('RejectBountyEscrow Error: ', error);
   }
 }
