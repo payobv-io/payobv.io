@@ -37,6 +37,14 @@ type EscrowDepositResult = {
 async function InitializeEscrowDeposit(
   props: InitEscrowProps
 ): Promise<EscrowDepositResult> {
+  if (!props.wallet || !props.wallet.publicKey) {
+    console.error('Wallet is not connected');
+    return {
+      escrowAddress: new PublicKey(0),
+      transactionSignature: null,
+    };
+  }
+
   const program = getProgram(props.wallet);
   const [escrowAccount] = PublicKey.findProgramAddressSync(
     [Buffer.from('escrow'), Buffer.from(props.issueId.toString())],
