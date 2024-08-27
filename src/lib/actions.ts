@@ -4,6 +4,7 @@ import { options } from '@/app/api/auth/[...nextauth]/options';
 import { BountyStatus, db, RepositoryUserRole } from '@/db/db';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 interface WalletProps {
   publicAddress: string;
@@ -26,6 +27,23 @@ export async function getServerSessionID(): Promise<number | null> {
     return parseInt(token?.sub);
   }
   return null;
+}
+
+export async function checkRootPageAccess(){
+  const userId = await getServerSessionID();
+
+  if(userId){
+    const user = await findExistingUser(userId);
+    const initialRepositoryRole = user?.initialRepositoryRole;
+
+    if(initialRepositoryRole){
+        if (initialRepositoryRole === RepositoryUserRole.MAINTAINER) {
+          return redirect('/maintainer/dashboard');
+        } else {
+          return redirect('/profile');
+      }
+    }
+  }
 }
 
 export const findExistingUser = async (userId: number) => {
@@ -215,3 +233,5 @@ export async function rejectBountyEscrow(bountyId: number) {
     console.error('RejectBountyEscrow Error: ', error);
   }
 }
+
+
