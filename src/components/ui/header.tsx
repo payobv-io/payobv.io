@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   DropdownMenu,
@@ -7,21 +7,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "./button"
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
-import { signOut } from "next-auth/react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+} from '@/components/ui/dropdown-menu';
+import { signOut } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from './avatar';
+import { Button } from './button';
 
 export default function Header() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <header className="bg-white shadow-sm z-10 fixed w-full md:pl-64">
-      <div className="max-w-7xl sm:px-6 lg:px-3 flex justify-between items-center md:h-[56px]">
+      <div className="sm:px-6 lg:px-3 flex justify-between items-center md:h-[56px]">
         <div className="flex items-center">
-          <span className="ml-2 font-semibold text-xl text-gray-900">Maintainer</span>
+          <span className="ml-2 font-semibold text-xl text-gray-900">
+            Maintainer
+          </span>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -42,22 +44,13 @@ export default function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              Profile
-            </DropdownMenuItem>
-            {
-              pathname.startsWith('/maintainer') 
-              ? undefined
-              :  
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            {pathname.startsWith('/maintainer') ? undefined : (
               <Link href="/maintainer/dashboard">
-                <DropdownMenuItem>
-                  Maintainer
-                </DropdownMenuItem>  
+                <DropdownMenuItem>Maintainer</DropdownMenuItem>
               </Link>
-            }
-            <DropdownMenuItem>
-              Contributor
-            </DropdownMenuItem>
+            )}
+            <DropdownMenuItem>Contributor</DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 signOut({ callbackUrl: '/' });
@@ -69,5 +62,5 @@ export default function Header() {
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }
