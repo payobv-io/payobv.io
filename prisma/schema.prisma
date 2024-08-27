@@ -56,15 +56,15 @@ model RepositoryUser {
 }
 
 model Bounty {
-  id                Int          @id @default(autoincrement())
-  title             String // Issue title
-  author            User         @relation("AuthorBounties", fields: [authorId], references: [id])
-  authorId          Int
-  receiver          User?        @relation("ReceivedBounties", fields: [receiverId], references: [id])
-  receiverId        Int?
-  repository        Repository   @relation(fields: [repositoryId], references: [id])
-  repositoryId      Int
-  issueNumber       Int
+  id               Int   @id @default(autoincrement())
+  title            String // Issue title
+  author           User     @relation("AuthorBounties", fields: [authorId], references: [id])
+  authorId         Int
+  receiver         User?    @relation("ReceivedBounties", fields: [receiverId], references: [id])
+  receiverId       Int?
+  repository       Repository @relation(fields: [repositoryId], references: [id])
+  repositoryId     Int
+  issueNumber      Int @unique
   pullRequestNumber Int?
   escrow            Escrow?      @relation(fields: [escrowId], references: [id])
   escrowId          Int?         @unique
