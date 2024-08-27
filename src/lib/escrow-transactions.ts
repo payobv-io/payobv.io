@@ -14,7 +14,7 @@ type EscrowDepositResult = {
   transactionSignature: string | null;
 };
 
-export async function InitializeEscrowDeposit(
+export async function initializeEscrowDeposit(
   props: InitEscrowProps
 ): Promise<EscrowDepositResult> {
   if (!props.wallet || !props.wallet.publicKey) {

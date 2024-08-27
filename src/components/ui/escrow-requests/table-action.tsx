@@ -43,7 +43,7 @@ export default function TableAction({
       <ConfirmationDialog
         open={dialogOpen} 
         type={dialogType} 
-        selectedRequest={selectedRequest}
+        selectedRequest={selectedRequest!}
         setDialogOpen={setDialogOpen} 
       />
     </div>

@@ -1,7 +1,7 @@
 import { acceptBountyEscrow, rejectBountyEscrow } from '@/lib/actions';
-import { InitializeEscrowDeposit } from '@/lib/escrow-transactions';
+import { initializeEscrowDeposit } from '@/lib/escrow-transactions';
+import { useWallet } from "@solana/wallet-adapter-react";
 import { EscrowRequestFromDb } from '@/lib/types';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { Button } from '../button';
 import {
@@ -12,11 +12,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../dialog';
+import { useToast } from '../use-toast';
 
 type DialogProps = {
   open: boolean;
   type?: 'accept' | 'reject';
-  selectedRequest?: EscrowRequestFromDb;
+  selectedRequest: EscrowRequestFromDb;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -28,6 +29,63 @@ export default function ConfirmationDialog({
   setDialogOpen,
 }: DialogProps) {
   const wallet = useWallet();
+  const {toast} = useToast();
+
+  const handleApproveRequest = async () => {
+    try {
+      const escrowDepositResult = await initializeEscrowDeposit(
+        {
+          wallet: wallet,
+          issueId: selectedRequest.issueNumber,
+          bountyAmount: selectedRequest.amount,
+        }
+      );
+
+      if (escrowDepositResult.transactionSignature) {
+        await acceptBountyEscrow({
+          bountyId: selectedRequest.id,
+          transactionSignature:
+            escrowDepositResult.transactionSignature!,
+          escrowAddress:
+            escrowDepositResult.escrowAddress.toString(),
+        });
+      }
+
+      // Close the dialog and show success toast
+      setDialogOpen(false);
+      toast({
+        title: 'Escrow Request Approved',
+        description: `The escrow request for issue #${selectedRequest.issueNumber} has been approved.`,
+        duration: 5000,
+        variant: 'success',
+      })
+    } catch (error) {
+      let errorMessage = 'Failed to approve escrow request';
+      if(error instanceof Error) {
+        errorMessage = error.message;
+      }
+      console.error(errorMessage);
+
+      // Show error toast
+      toast({
+        title: 'Error',
+        description: errorMessage,
+        duration: 5000,
+        variant: 'alert',
+      })
+    }
+  }
+
+  const handleRejectRequest = () => {
+    rejectBountyEscrow(selectedRequest.id);
+    setDialogOpen(false);
+    toast({
+      title: 'Escrow Request Rejected',
+      description: `The escrow request for issue #${selectedRequest.issueNumber} has been rejected.`,
+      duration: 5000,
+    })
+  }
+
   return (
     <Dialog open={open} onOpenChange={setDialogOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -40,45 +98,21 @@ export default function ConfirmationDialog({
                 action cannot be undone.
               </DialogDescription>
             </DialogHeader>
-            {selectedRequest ? (
-              <>
-                <RequestDetail request={selectedRequest} />
-                <DialogFooter>
-                  <Button
-                    variant="outline"
-                    onClick={() => setDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      const escrowDepositResult = await InitializeEscrowDeposit(
-                        {
-                          wallet: wallet,
-                          issueId: selectedRequest.issueNumber,
-                          bountyAmount: selectedRequest.amount,
-                        }
-                      );
-
-                      if (escrowDepositResult.transactionSignature) {
-                        acceptBountyEscrow({
-                          bountyId: selectedRequest.id,
-                          transactionSignature:
-                            escrowDepositResult.transactionSignature!,
-                          escrowAddress:
-                            escrowDepositResult.escrowAddress.toString(),
-                        });
-                      }
-
-                      setDialogOpen(false);
-                    }}
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    <CheckIcon className="mr-2 h-4 w-4" /> Approve
-                  </Button>
-                </DialogFooter>
-              </>
-            ) : undefined}
+            <RequestDetail request={selectedRequest} />
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleApproveRequest}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <CheckIcon className="mr-2 h-4 w-4" /> Approve
+              </Button>
+            </DialogFooter>
           </>
         ) : (
           <>
@@ -89,28 +123,21 @@ export default function ConfirmationDialog({
                 cannot be undone.
               </DialogDescription>
             </DialogHeader>
-            {selectedRequest ? (
-              <>
-                <RequestDetail request={selectedRequest} />
-                <DialogFooter>
-                  <Button
-                    variant="outline"
-                    onClick={() => setDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      rejectBountyEscrow(selectedRequest.id);
-                      setDialogOpen(false);
-                    }}
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    <XIcon className="mr-2 h-4 w-4" /> Reject
-                  </Button>
-                </DialogFooter>
-              </>
-            ) : undefined}
+            <RequestDetail request={selectedRequest} />
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleRejectRequest}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                <XIcon className="mr-2 h-4 w-4" /> Reject
+              </Button>
+            </DialogFooter>
           </>
         )}
       </DialogContent>
