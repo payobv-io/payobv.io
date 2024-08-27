@@ -6,7 +6,7 @@ import { WalletButton } from '../solana/solana-provider';
 import { signOut } from 'next-auth/react';
 import { Button } from '../ui/button';
 import { AppHero } from '../ui/ui-layout';
-import { AccountBalance, AccountButtons } from './account-ui';
+import { AccountBalance } from './account-ui';
 
 export default function AccountListFeature() {
   const { publicKey, connected } = useWallet();
@@ -20,11 +20,7 @@ export default function AccountListFeature() {
               <AppHero
                 title={<AccountBalance address={publicKey!} />}
                 subtitle={<div className="my-4"></div>}
-              >
-                <div className="my-4">
-                  <AccountButtons address={publicKey!} />
-                </div>
-              </AppHero>
+              ></AppHero>
             </div>
           ) : null}
 
