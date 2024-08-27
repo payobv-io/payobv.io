@@ -1,5 +1,5 @@
 import { db, BountyStatus } from "@/db/db"
-import { EscrowRequestFromDb, PaidBountyDetails } from "./types"
+import { ContributedBountyDetail, ContributionDetails, EscrowRequestFromDb, PaidBountyDetails } from "./types"
 
 /**
  * Fetches all the escrow requests for the maintainer
@@ -200,5 +200,82 @@ export const getTotalMoneySpent = async (userId: number): Promise<number> => {
   } catch (error) {
     console.error('Error fetching total money spent:', error)
     return 0
+  }
+}
+
+/**
+ * Fetches the total earning details for the maintainer
+ * 
+ * @param userId 
+ * @returns Total earning details for the maintainer
+ * @example of the return value:
+ * {
+ *  totalAmount: 500,
+ *  totalBounties: 5,
+ *  repositoryCount: 3
+ * }
+ * 
+ */
+export const getContributionDetails = async (userId: number): Promise<ContributionDetails> => {
+  try {
+    const bountyDetails = await db.bounty.aggregate({
+      _sum: {
+        amount: true
+      },
+      _count: true,
+      where: {
+        receiverId: userId,
+        status: BountyStatus.COMPLETED
+      }
+    })
+
+    const repositories = await db.bounty.groupBy({
+      by: ['repositoryId'],
+      where: {
+        receiverId: userId,
+        status: BountyStatus.COMPLETED
+      }
+    })
+
+    return {
+      totalAmount: bountyDetails._sum.amount || 0,
+      totalBounties: bountyDetails._count,
+      repositoryCount: repositories.length
+    }
+  } catch (error) {
+    console.error('Error fetching total earning details: ', error)
+    return {
+      totalAmount: 0,
+      totalBounties: 0,
+      repositoryCount: 0
+    }
+  }
+}
+
+export const getContributedBountyDetails = async (userId: number): Promise<ContributedBountyDetail[] | []> => {
+  try {
+    const bountyDetails = await db.bounty.findMany({
+      where: {
+        receiverId: userId,
+        status: BountyStatus.COMPLETED
+      },
+      select: {
+        id: true,
+        issueNumber: true,
+        title: true,
+        amount: true,
+        signature: true,
+        repository: {
+          select: {
+            name: true
+          }
+        }
+      }
+    })
+
+    return bountyDetails as ContributedBountyDetail[]
+  } catch (error) {
+    console.error('Error fetching contributed bounty details:', error)
+    return []
   }
 }

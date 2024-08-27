@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import CardWrapper from '@/components/ui/dashboard/card-wrapper';
-import BountyTable from '@/components/ui/dashboard/table';
+import CardWrapper from '@/components/ui/maintainer/dashboard/card-wrapper';
+import BountyTable from '@/components/ui/maintainer/dashboard/table';
 import { getServerSessionID } from '@/lib/actions';
 import { PlusCircleIcon } from 'lucide-react';
 
