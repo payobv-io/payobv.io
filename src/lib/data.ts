@@ -128,7 +128,7 @@ export const getRecentBounties = async (userId: number) => {
  */
 export const getPaidBountyDetails = async (userId: number): Promise<PaidBountyDetails> => {
   try {
-    // Fetch the total paid bounty amount and the total number of bounties and repositories
+    // Fetch the total paid bounty amount and the total number of bounties
     const detail = await db.bounty.aggregate({
       _sum: {
         amount: true
@@ -171,6 +171,34 @@ export const totalRepositories = async (userId: number): Promise<number> => {
     return total
   } catch (error) {
     console.error('Error fetching total repositories:', error)
+    return 0
+  }
+}
+
+/**
+ * Fetches the total money spent by the maintainer
+ * 
+ * @param userId 
+ * @returns Total money spent by the maintainer (Paid and Escrowed)
+ * 
+ */
+export const getTotalMoneySpent = async (userId: number): Promise<number> => {
+  try {
+    const total = await db.bounty.aggregate({
+      _sum: {
+        amount: true
+      },
+      where: {
+        authorId: userId,
+        status: {
+          in: [BountyStatus.COMPLETED, BountyStatus.OPEN]
+        }
+      }
+    })
+
+    return total._sum.amount || 0
+  } catch (error) {
+    console.error('Error fetching total money spent:', error)
     return 0
   }
 }
