@@ -39,7 +39,11 @@ export default async function BountyTable({
         {bounties.map((bounty) => (
           <TableRow key={bounty.id}>
             <TableCell className="font-medium">
-              <a href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} className="text-blue-600 hover:underline">{bounty.title}</a>
+              <a 
+                href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} 
+                className="text-blue-600 hover:underline"
+                target="_blank"
+              >{bounty.title}</a>
             </TableCell>
             <TableCell>{bounty.repository.name}</TableCell>
             <TableCell>{bounty.receiver?.githubId ?? "-"}</TableCell>

@@ -20,10 +20,15 @@ export default async function Page() {
       <div className="container mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-gray-800">Dashboard</h1>
-          <Button className="flex items-center space-x-2">
-            <PlusCircleIcon className="h-5 w-5" />
-            <span>Add Repositories</span>
-          </Button>
+          <a 
+            href="https://github.com/apps/payobvio-github-app/installations/new"
+            target="_blank"
+          >
+            <Button className="flex items-center space-x-2">
+              <PlusCircleIcon className="h-5 w-5" />
+              <span>Add Repositories</span>
+            </Button>
+          </a>
         </div>
         
         <CardWrapper userId={userId} />

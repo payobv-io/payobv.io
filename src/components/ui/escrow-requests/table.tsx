@@ -33,7 +33,11 @@ export default async function EscrowRequestTable() {
             {escrowRequests.map((request) => (
               <TableRow key={request.id}>
                 <TableCell className="font-medium w-[400px]">
-                  <a href={createLinkToIssue(request.repository.name, request.issueNumber)} className="text-blue-600 hover:underline">{request.title}</a>
+                  <a 
+                    href={createLinkToIssue(request.repository.name, request.issueNumber)} 
+                    target="_blank"
+                    className="text-blue-600 hover:underline"
+                  >{request.title}</a>
                 </TableCell>
                 <TableCell>{request.repository.name}</TableCell>
                 <TableCell>{request.amount} SOL</TableCell>
