@@ -107,6 +107,7 @@ enum RepositoryUserRole {
 enum BountyStatus {
   PENDING_ESCROW
   OPEN
+  RELEASING_ESCROW
   COMPLETED
   CANCELLED
 }
