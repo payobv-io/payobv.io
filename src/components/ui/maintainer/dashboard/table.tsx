@@ -64,6 +64,7 @@ export default async function BountyTable({
               <TableCell className="text-center">
                 {bounty.status === BountyStatus.RELEASING_ESCROW ? (
                   <ReleaseConfirmButton
+                    bountyId={bounty.id}
                     issueRepoId={`${bounty.issueNumber}_${bounty.repositoryId}`}
                     bountyAmount={bounty.amount}
                     contributorId={bounty.receiverId!}

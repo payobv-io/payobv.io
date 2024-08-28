@@ -1,11 +1,13 @@
 'use client';
 
+import { releaseBountyEscrow } from '@/lib/actions';
 import { releaseEscrowFund } from '@/lib/escrow-transactions';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Button } from '../../button';
 import { toast } from '../../use-toast';
 
 type ReleaseConfirmButtonProps = {
+  bountyId: number;
   issueRepoId: string;
   bountyAmount: number;
   contributorId: number;
@@ -24,6 +26,14 @@ const ReleaseConfirmButton = (props: ReleaseConfirmButtonProps) => {
             bountyAmount: props.bountyAmount,
             contributorId: props.contributorId,
           });
+
+          if (releaseEscrowFundResult) {
+            await releaseBountyEscrow({
+              bountyId: props.bountyId,
+              transactionSignature:
+                releaseEscrowFundResult.transactionSignature!,
+            });
+          }
           console.log('Escrow released:', releaseEscrowFundResult);
         } catch (error) {
           let errorMessage = 'Failed to release the escrow';
