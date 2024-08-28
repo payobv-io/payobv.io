@@ -40,7 +40,7 @@ export default function ConfirmationDialog({
       console.log('Getting Escrow Deposit Result');
       const escrowDepositResult = await initializeEscrowDeposit({
         wallet: wallet,
-        issueRepoId: selectedRequest.issueNumber,
+        issueRepoId: `${selectedRequest.issueNumber}_${selectedRequest.repositoryId}`,
         bountyAmount: selectedRequest.amount,
       });
 
