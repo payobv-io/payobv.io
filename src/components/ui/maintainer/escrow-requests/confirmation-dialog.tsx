@@ -56,6 +56,8 @@ export default function ConfirmationDialog({
           transactionSignature: escrowDepositResult.transactionSignature!,
           escrowAddress: escrowDepositResult.escrowAddress.toString(),
         });
+      } else{
+        throw new Error(escrowDepositResult.errorMessage);
       }
 
       toast({
