@@ -1,5 +1,5 @@
 import { getServerSessionID } from '@/lib/actions';
-import { getEscrowRequests } from '@/lib/data';
+import { getEscrowRequests, getOpenBounties } from '@/lib/data';
 import { createLinkToIssue } from '@/lib/utils';
 import { Card } from '../../card';
 import {
@@ -10,18 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from '../../table';
-import TableAction from './table-action';
 import { SearchIcon } from 'lucide-react';
 import EmptyState from '../../empty-state';
 
 export default async function EscrowRequestTable() {
-  const userID = await getServerSessionID();
 
-  if (!userID) {
-    return null;
-  }
-
-  const escrowRequests = await getEscrowRequests(userID);
+  const openBounties = await getOpenBounties();
 
   return (
     <Card>
@@ -31,14 +25,13 @@ export default async function EscrowRequestTable() {
             <TableHead className="w-[400px]">Issue</TableHead>
             <TableHead>Repository</TableHead>
             <TableHead>Amount</TableHead>
-            <TableHead>Date Requested</TableHead>
-            <TableHead className="text-center">Action</TableHead>
+            <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {
-          escrowRequests.length > 0 ?
-            escrowRequests.map((request) => (
+          openBounties.length > 0 ?
+            openBounties.map((request) => (
               <TableRow key={request.id}>
                 <TableCell className="font-medium w-[400px]">
                   <a
@@ -55,9 +48,6 @@ export default async function EscrowRequestTable() {
                 <TableCell>{request.repository.name}</TableCell>
                 <TableCell>{request.amount} SOL</TableCell>
                 <TableCell>{request.createdAt.toDateString()}</TableCell>
-                <TableCell>
-                  <TableAction request={request} />
-                </TableCell>
               </TableRow>
             ))
           : (

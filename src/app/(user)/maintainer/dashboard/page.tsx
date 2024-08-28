@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import ConnectWalletButton from '@/components/ui/connect-wallet-button';
 import CardWrapper from '@/components/ui/maintainer/dashboard/card-wrapper';
 import BountyTable from '@/components/ui/maintainer/dashboard/table';
 import { getServerSessionID } from '@/lib/actions';
@@ -17,15 +18,18 @@ export default async function Page() {
       <div className="container mx-auto px-6 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-gray-800">Dashboard</h1>
-          <a
-            href="https://github.com/apps/payobvio-github-app/installations/new"
-            target="_blank"
-          >
-            <Button className="flex items-center space-x-2">
-              <PlusCircleIcon className="h-5 w-5" />
-              <span>Add Repositories</span>
-            </Button>
-          </a>
+          <div className='flex gap-x-4'>
+            <a
+              href="https://github.com/apps/payobvio-github-app/installations/new"
+              target="_blank"
+            >
+              <Button className="flex items-center space-x-2">
+                <PlusCircleIcon className="h-5 w-5" />
+                <span>Add Repositories</span>
+              </Button>
+            </a>
+            <ConnectWalletButton />
+          </div>
         </div>
 
         <CardWrapper userId={userID} />
