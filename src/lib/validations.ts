@@ -11,7 +11,7 @@ export const bountyCreateSchema = z.object({
 export const bountyReleaseSchema = z.object({
   repositoryId: z.number(),
   issueNumber: z.number(),
-  receiverId: z.number(),
+  authorId: z.number(),
   pullRequestNumber: z.number(),
 });
 

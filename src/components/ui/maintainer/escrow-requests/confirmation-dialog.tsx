@@ -67,7 +67,7 @@ export default function ConfirmationDialog({
         errorMessage = error.message;
       }
       console.error(errorMessage);
-
+      setDialogOpen(false);
       // Show error toast
       toast({
         title: 'Error',

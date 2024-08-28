@@ -1,11 +1,30 @@
 import { BadgeProps } from "@/components/ui/badge";
 import { BountyStatus } from "@prisma/client";
 
-export const bountyVariants: {
-  [key in BountyStatus]: BadgeProps["variant"]
+export const bountyStatusDetails: {
+  [key in BountyStatus]: {
+    variant: BadgeProps["variant"]
+    label: string
+  }
 } = {
-  "OPEN" : "default",
-  "PENDING_ESCROW" : "secondary",
-  "COMPLETED" : "success",
-  "CANCELLED" : "alert",
+  "OPEN" : {
+    variant: "outline",
+    label: "OPEN"
+  },
+  "PENDING_ESCROW" : {
+    variant: "secondary",
+    label: "PENDING ESCROW"
+  },
+  "RELEASING_ESCROW" : {
+    variant: "primary",
+    label: "PROCESSING"
+  },
+  "COMPLETED" : {
+    variant: "success",
+    label: "PAID"
+  },
+  "CANCELLED" : {
+    variant: "alert",
+    label: "REJECTED"
+  },
 }

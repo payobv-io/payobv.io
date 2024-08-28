@@ -4,7 +4,9 @@ import { Badge } from "../../badge";
 import { createLinkToIssue } from "@/lib/utils";
 import EmptyState from "../../empty-state";
 import { SearchIcon } from "lucide-react";
-import { bountyVariants } from "@/lib/constants";
+import { bountyStatusDetails } from "@/lib/constants";
+import { BountyStatus } from "@prisma/client";
+import ReleaseConfirmButton from "./release-confirm-button";
 
 type BountyTableProps = React.ComponentPropsWithRef<"table"> &
 {
@@ -25,7 +27,8 @@ export default async function BountyTable({
           <TableHead>Repository</TableHead>
           <TableHead>Contributor</TableHead>
           <TableHead>Bounty</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead className="text-center">Status</TableHead>
+          <TableHead className="text-center">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -43,10 +46,17 @@ export default async function BountyTable({
               <TableCell>{bounty.repository.name}</TableCell>
               <TableCell>{bounty.receiver?.githubId ?? "-"}</TableCell>
               <TableCell>{bounty.amount} SOL</TableCell>
-              <TableCell>
-                <Badge variant={bountyVariants[bounty.status]}>
-                  {bounty.status}
+              <TableCell className="text-center">
+                <Badge variant={bountyStatusDetails[bounty.status].variant}>
+                  {bountyStatusDetails[bounty.status].label}
                 </Badge>
+              </TableCell>
+              <TableCell className="text-center">
+                {
+                  bounty.status === BountyStatus.RELEASING_ESCROW
+                  ? <ReleaseConfirmButton bountyId={bounty.id} />
+                  : "-"
+                }
               </TableCell>
             </TableRow>
           ))
