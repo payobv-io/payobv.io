@@ -1,23 +1,29 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getRecentBounties } from "@/lib/data";
-import { Badge } from "../../badge";
-import { createLinkToIssue } from "@/lib/utils";
-import EmptyState from "../../empty-state";
-import { SearchIcon } from "lucide-react";
-import { bountyStatusDetails } from "@/lib/constants";
-import { BountyStatus } from "@prisma/client";
-import ReleaseConfirmButton from "./release-confirm-button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { bountyStatusDetails } from '@/lib/constants';
+import { getRecentBounties } from '@/lib/data';
+import { createLinkToIssue } from '@/lib/utils';
+import { BountyStatus } from '@prisma/client';
+import { SearchIcon } from 'lucide-react';
+import { Badge } from '../../badge';
+import EmptyState from '../../empty-state';
+import ReleaseConfirmButton from './release-confirm-button';
 
-type BountyTableProps = React.ComponentPropsWithRef<"table"> &
-{
-  userId: number
-}
+type BountyTableProps = React.ComponentPropsWithRef<'table'> & {
+  userId: number;
+};
 
 export default async function BountyTable({
   userId,
   ...props
 }: BountyTableProps) {
-  const bounties = await getRecentBounties(userId)
+  const bounties = await getRecentBounties(userId);
 
   return (
     <Table {...props}>
@@ -32,19 +38,23 @@ export default async function BountyTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {
-          bounties.length > 0 ?
+        {bounties.length > 0 ? (
           bounties.map((bounty) => (
             <TableRow key={bounty.id}>
               <TableCell className="font-medium">
-                <a 
-                  href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} 
+                <a
+                  href={createLinkToIssue(
+                    bounty.repository.name,
+                    bounty.issueNumber
+                  )}
                   className="text-blue-600 hover:underline"
                   target="_blank"
-                >{bounty.title}</a>
+                >
+                  {bounty.title}
+                </a>
               </TableCell>
               <TableCell>{bounty.repository.name}</TableCell>
-              <TableCell>{bounty.receiver?.githubId ?? "-"}</TableCell>
+              <TableCell>{bounty.receiver?.githubId ?? '-'}</TableCell>
               <TableCell>{bounty.amount} SOL</TableCell>
               <TableCell className="text-center">
                 <Badge variant={bountyStatusDetails[bounty.status].variant}>
@@ -52,27 +62,29 @@ export default async function BountyTable({
                 </Badge>
               </TableCell>
               <TableCell className="text-center">
-                {
-                  bounty.status === BountyStatus.RELEASING_ESCROW
-                  ? <ReleaseConfirmButton bountyId={bounty.id} />
-                  : "-"
-                }
+                {bounty.status === BountyStatus.RELEASING_ESCROW ? (
+                  <ReleaseConfirmButton
+                    issueRepoId={`${bounty.issueNumber}_${bounty.repositoryId}`}
+                    bountyAmount={bounty.amount}
+                    contributorId={bounty.receiverId!}
+                  />
+                ) : (
+                  '-'
+                )}
               </TableCell>
             </TableRow>
           ))
-        : (
+        ) : (
           <TableRow>
             <TableCell colSpan={5} className="text-center">
               <EmptyState
-                message="No recent bounties found" 
+                message="No recent bounties found"
                 icon={SearchIcon}
               />
             </TableCell>
           </TableRow>
-        )
-
-        }
+        )}
       </TableBody>
     </Table>
-  )
+  );
 }

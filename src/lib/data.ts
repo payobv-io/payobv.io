@@ -1,12 +1,17 @@
-import { db, BountyStatus } from "@/db/db"
-import { ContributedBountyDetail, ContributionDetails, EscrowRequestFromDb, PaidBountyDetails } from "./types"
+import { BountyStatus, db } from '@/db/db';
+import {
+  ContributedBountyDetail,
+  ContributionDetails,
+  EscrowRequestFromDb,
+  PaidBountyDetails,
+} from './types';
 
 /**
  * Fetches all the escrow requests for the maintainer
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Array of escrow requests for the maintainer
- * @example of the return value: 
+ * @example of the return value:
  * [
  *  {
  *   id: 1,
@@ -19,15 +24,17 @@ import { ContributedBountyDetail, ContributionDetails, EscrowRequestFromDb, Paid
  *  },
  * ...
  * ]
- * 
- * 
+ *
+ *
  */
-export const getEscrowRequests = async (userId: number): Promise<EscrowRequestFromDb[] | []> => {
+export const getEscrowRequests = async (
+  userId: number
+): Promise<EscrowRequestFromDb[] | []> => {
   try {
     const requests: EscrowRequestFromDb[] = await db.bounty.findMany({
       where: {
         authorId: userId,
-        status: BountyStatus.PENDING_ESCROW
+        status: BountyStatus.PENDING_ESCROW,
       },
       select: {
         id: true,
@@ -38,32 +45,32 @@ export const getEscrowRequests = async (userId: number): Promise<EscrowRequestFr
         createdAt: true,
         repository: {
           select: {
-            name: true
-          }
-        }
+            name: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
-    })
+        createdAt: 'desc',
+      },
+    });
 
-    return requests
+    return requests;
   } catch (error) {
-    console.error('Error fetching escrow requests:', error)
-    return []
+    console.error('Error fetching escrow requests:', error);
+    return [];
   }
-}
+};
 
 /**
  * Fetches the recent bounties for the maintainer (not the PENDING_ESCROW bounties)
- * where bounty status is anything in the list: 
- * 1. "OPEN" 
- * 2. "COMPLETED" 
+ * where bounty status is anything in the list:
+ * 1. "OPEN"
+ * 2. "COMPLETED"
  * 3. "CANCELLED"
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Array of recent bounties for the maintainer
- * @example of the return value: 
+ * @example of the return value:
  * [
  *  {
  *   id: 1,
@@ -76,8 +83,8 @@ export const getEscrowRequests = async (userId: number): Promise<EscrowRequestFr
  *  },
  * ...
  * ]
- * 
- * 
+ *
+ *
  */
 export const getRecentBounties = async (userId: number) => {
   try {
@@ -85,8 +92,8 @@ export const getRecentBounties = async (userId: number) => {
       where: {
         authorId: userId,
         status: {
-          not: BountyStatus.PENDING_ESCROW
-        }
+          not: BountyStatus.PENDING_ESCROW,
+        },
       },
       select: {
         id: true,
@@ -96,117 +103,120 @@ export const getRecentBounties = async (userId: number) => {
         amount: true,
         status: true,
         createdAt: true,
+        receiverId: true,
         receiver: {
           select: {
-            githubId: true
-          }
+            githubId: true,
+          },
         },
         repository: {
           select: {
-            name: true
-          }
-        }
+            name: true,
+          },
+        },
       },
       orderBy: {
-        createdAt: 'desc'
-      }
-    })
+        createdAt: 'desc',
+      },
+    });
 
-    return bounties
+    return bounties;
   } catch (error) {
-    console.error('Error fetching recent bounties:', error)
-    return []
+    console.error('Error fetching recent bounties:', error);
+    return [];
   }
-}
+};
 
 /**
  * Fetches the total paid bounty amount for the maintainer
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Total paid bounty amount for the maintainer
- * 
+ *
  */
-export const getPaidBountyDetails = async (userId: number): Promise<PaidBountyDetails> => {
+export const getPaidBountyDetails = async (
+  userId: number
+): Promise<PaidBountyDetails> => {
   try {
     // Fetch the total paid bounty amount and the total number of bounties
     const detail = await db.bounty.aggregate({
       _sum: {
-        amount: true
+        amount: true,
       },
       _count: true,
       where: {
         authorId: userId,
-        status: BountyStatus.COMPLETED
-      }
-    })
+        status: BountyStatus.COMPLETED,
+      },
+    });
 
     return {
       totalAmount: detail._sum.amount || 0,
-      totalBounties: detail._count
-    }
+      totalBounties: detail._count,
+    };
   } catch (error) {
-    console.error('Error fetching total paid bounty details:', error)
+    console.error('Error fetching total paid bounty details:', error);
     return {
       totalAmount: 0,
-      totalBounties: 0
-    }
+      totalBounties: 0,
+    };
   }
-}
+};
 
 /**
  * Fetches the total number of repositories for the maintainer
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Total number of repositories for the maintainer
- * 
+ *
  */
 export const totalRepositories = async (userId: number): Promise<number> => {
   try {
     const total = await db.repositoryUser.count({
       where: {
-        userId
-      }
-    })
+        userId,
+      },
+    });
 
-    return total
+    return total;
   } catch (error) {
-    console.error('Error fetching total repositories:', error)
-    return 0
+    console.error('Error fetching total repositories:', error);
+    return 0;
   }
-}
+};
 
 /**
  * Fetches the total money spent by the maintainer
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Total money spent by the maintainer (Paid and Escrowed)
- * 
+ *
  */
 export const getTotalMoneySpent = async (userId: number): Promise<number> => {
   try {
     const total = await db.bounty.aggregate({
       _sum: {
-        amount: true
+        amount: true,
       },
       where: {
         authorId: userId,
         status: {
-          in: [BountyStatus.COMPLETED, BountyStatus.OPEN]
-        }
-      }
-    })
+          in: [BountyStatus.COMPLETED, BountyStatus.OPEN],
+        },
+      },
+    });
 
-    return total._sum.amount || 0
+    return total._sum.amount || 0;
   } catch (error) {
-    console.error('Error fetching total money spent:', error)
-    return 0
+    console.error('Error fetching total money spent:', error);
+    return 0;
   }
-}
+};
 
 /**
  * Fetches the total earning details for the maintainer
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Total earning details for the maintainer
  * @example of the return value:
  * {
@@ -214,52 +224,56 @@ export const getTotalMoneySpent = async (userId: number): Promise<number> => {
  *  totalBounties: 5,
  *  repositoryCount: 3
  * }
- * 
+ *
  */
-export const getContributionDetails = async (userId: number): Promise<ContributionDetails> => {
+export const getContributionDetails = async (
+  userId: number
+): Promise<ContributionDetails> => {
   try {
     const bountyDetails = await db.bounty.aggregate({
       _sum: {
-        amount: true
+        amount: true,
       },
       _count: true,
       where: {
         receiverId: userId,
-        status: BountyStatus.COMPLETED
-      }
-    })
+        status: BountyStatus.COMPLETED,
+      },
+    });
 
     const repositories = await db.bounty.groupBy({
       by: ['repositoryId'],
       where: {
         receiverId: userId,
-        status: BountyStatus.COMPLETED
-      }
-    })
+        status: BountyStatus.COMPLETED,
+      },
+    });
 
     return {
       totalAmount: bountyDetails._sum.amount || 0,
       totalBounties: bountyDetails._count,
-      repositoryCount: repositories.length
-    }
+      repositoryCount: repositories.length,
+    };
   } catch (error) {
-    console.error('Error fetching total earning details: ', error)
+    console.error('Error fetching total earning details: ', error);
     return {
       totalAmount: 0,
       totalBounties: 0,
-      repositoryCount: 0
-    }
+      repositoryCount: 0,
+    };
   }
-}
+};
 
-export const getContributedBountyDetails = async (userId: number): Promise<ContributedBountyDetail[] | []> => {
+export const getContributedBountyDetails = async (
+  userId: number
+): Promise<ContributedBountyDetail[] | []> => {
   try {
     const bountyDetails = await db.bounty.findMany({
       where: {
         receiverId: userId,
         status: {
-          in: [BountyStatus.COMPLETED, BountyStatus.RELEASING_ESCROW]
-        }
+          in: [BountyStatus.COMPLETED, BountyStatus.RELEASING_ESCROW],
+        },
       },
       select: {
         id: true,
@@ -270,15 +284,15 @@ export const getContributedBountyDetails = async (userId: number): Promise<Contr
         status: true,
         repository: {
           select: {
-            name: true
-          }
-        }
-      }
-    })
+            name: true,
+          },
+        },
+      },
+    });
 
-    return bountyDetails as ContributedBountyDetail[]
+    return bountyDetails as ContributedBountyDetail[];
   } catch (error) {
-    console.error('Error fetching contributed bounty details:', error)
-    return []
+    console.error('Error fetching contributed bounty details:', error);
+    return [];
   }
-}
+};
