@@ -64,7 +64,7 @@ model Bounty {
   receiverId       Int?
   repository       Repository @relation(fields: [repositoryId], references: [id])
   repositoryId     Int
-  issueNumber      Int @unique
+  issueNumber      Int
   pullRequestNumber Int?
   escrow            Escrow?      @relation(fields: [escrowId], references: [id])
   escrowId          Int?         @unique
