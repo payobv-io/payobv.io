@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
   // TODO: Update the bounty status enum to include a new status for processing
   // TODO: Update the bounty table to make issueNumber and repositoryId a unique key
   const updateBounty = await db.bounty.update({
-    where: { issueNumber: data.issueNumber, repositoryId: data.repositoryId },
+    where: {
+      issueNumber_repositoryId: {
+        issueNumber: data.issueNumber,
+        repositoryId: data.repositoryId,
+      },
+    },
     data: {
       status: BountyStatus.PROCESSING,
       receiverId: data.receiverId,

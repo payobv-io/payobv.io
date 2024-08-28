@@ -6,7 +6,7 @@ import { solToLamports } from './utils';
 
 type EscrowProps = {
   wallet: any;
-  issueId: number;
+  issueRepoId: number;
   bountyAmount: number;
   contributorId?: number;
 };
@@ -43,7 +43,7 @@ export async function initializeEscrowDeposit(
 
   const { program, escrowAccount } = await getEscrowAccount(
     props.wallet,
-    props.issueId
+    props.issueRepoId
   );
   let escrowAccountExists;
 
@@ -73,7 +73,7 @@ export async function initializeEscrowDeposit(
     if (!escrowAccountExists) {
       // Initialize the escrow account
       const initTx = await program.methods
-        .initializeEscrow(bountyAmountLamports, props.issueId.toString())
+        .initializeEscrow(bountyAmountLamports, props.issueRepoId.toString())
         .accounts(commonAccounts)
         .rpc();
       console.log('Initialize transaction signature:', initTx);
@@ -134,7 +134,7 @@ export async function releaseEscrowFund(
 
   const { program, escrowAccount } = await getEscrowAccount(
     props.wallet,
-    props.issueId
+    props.issueRepoId
   );
 
   try {
