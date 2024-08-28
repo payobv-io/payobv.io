@@ -47,7 +47,6 @@ export default async function BountyTable({
                   {bountyStatusDetails[bounty.status].label}
                 </Badge>
               </TableCell>
-              {/* TODO: Make this a solana explorer link */}
               <TableCell>
                 <a 
                   href={createSolanaExplorerLink(bounty.signature)} 
