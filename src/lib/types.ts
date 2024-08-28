@@ -1,5 +1,4 @@
 import type { BountyStatus } from "@prisma/client"
-import { LucideProps } from "lucide-react"
 
 export type NavLink = {
   name: string
@@ -39,3 +38,15 @@ export type ContributedBountyDetail = {
     name: string
   }
 }
+
+export type OpenBountyDetail = {
+  id: number,
+  title: string,
+  issueNumber: number,
+  createdAt: Date,
+  amount: number,
+  repository: {
+    name: string
+  }
+}
+

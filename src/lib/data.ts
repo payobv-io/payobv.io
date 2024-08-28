@@ -1,10 +1,11 @@
-import { BountyStatus, db } from '@/db/db';
 import {
   ContributedBountyDetail,
   ContributionDetails,
   EscrowRequestFromDb,
+  OpenBountyDetail,
   PaidBountyDetails,
 } from './types';
+import { db, BountyStatus } from "@/db/db"
 
 /**
  * Fetches all the escrow requests for the maintainer
@@ -264,9 +265,27 @@ export const getContributionDetails = async (
   }
 };
 
-export const getContributedBountyDetails = async (
-  userId: number
-): Promise<ContributedBountyDetail[] | []> => {
+/**
+ * Fetches the contributed bounty details for the maintainer
+ * 
+ * @param userId 
+ * @returns Contributed bounty details for the maintainer
+ * @example of the return value:
+ * [
+ *  {
+ *   id: 1,
+ *   issueNumber: 1,
+ *   title: 'Fix the button',
+ *   amount: 500,
+ *   status: 'COMPLETED',
+ *   signature: '0x1234',
+ *   repository: { name: 'acme/ui-library' }
+ *  },
+ * ...
+ * ]
+ * 
+ */
+export const getContributedBountyDetails = async (userId: number): Promise<ContributedBountyDetail[] | []> => {
   try {
     const bountyDetails = await db.bounty.findMany({
       where: {
@@ -295,4 +314,48 @@ export const getContributedBountyDetails = async (
     console.error('Error fetching contributed bounty details:', error);
     return [];
   }
-};
+}
+
+/**
+ * Fetches the open bounties
+ * 
+ * @returns Open bounties
+ * @example of the return value:
+ * [
+ *  {
+ *   id: 1,
+ *   issueNumber: 1,
+ *   title: 'Fix the button',
+ *   amount: 500,
+ *   repository: { name: 'acme/ui-library' }
+ *  },
+ * ...
+ * ]
+ * 
+ */
+export const getOpenBounties = async (): Promise<OpenBountyDetail[]> => {
+  try {
+    const bounties = await db.bounty.findMany({
+      where: {
+        status: BountyStatus.OPEN
+      },
+      select: {
+        id: true,
+        title: true,
+        issueNumber: true,
+        amount: true,
+        createdAt: true,
+        repository: {
+          select: {
+            name: true
+          }
+        }
+      }
+    })
+
+    return bounties
+  } catch (error) {
+    console.error('Error fetching open bounties:', error)
+    return []
+  }
+}

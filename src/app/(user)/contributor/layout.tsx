@@ -3,7 +3,7 @@ import { Gem, LayoutDashboardIcon } from "lucide-react";
 
 const links = [
   { name: "Dashboard", href: "/contributor/dashboard", icon: <LayoutDashboardIcon /> },
-  { name: "Open Bounties", href: "/contributor/escrow-requests", icon: <Gem />  }
+  { name: "Open Bounties", href: "/contributor/open-bounties", icon: <Gem />  }
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
