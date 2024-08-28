@@ -79,12 +79,13 @@ model Bounty {
 }
 
 model Escrow {
-  id             Int          @id @default(autoincrement())
-  accountAddress String       @unique
-  status         EscrowStatus @default(FUNDED)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  bounty         Bounty?
+  id               Int   @id @default(autoincrement())
+  accountAddress   String   @unique
+  status           EscrowStatus @default(FUNDED)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  bounty           Bounty?
+  signature        String @unique
 }
 
 enum EscrowStatus {
