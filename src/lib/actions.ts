@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { getRepoNameFromFullName } from './utils';
+import { BountyReleasedDetail } from './types';
 
 interface WalletProps {
   publicAddress: string;
@@ -135,7 +136,6 @@ async function getEscrowDetail(bountyId: number) {
  * 4. Update the bounty status to OPEN
  * 5. Add the transaction signature to the bounty table
  */
-// TODO: Add a new field to the escrow table to store the escrow transaction signature
 
 export async function acceptBountyEscrow({
   bountyId,
@@ -185,12 +185,11 @@ export async function acceptBountyEscrow({
     const responseBody = await response.json();
 
     console.log('Approved bounty escrow:', responseBody);
-    revalidatePath('/maintainer/escrow-requests');
-
-    // TODO: Redirect to Dashboard
   } catch (error) {
     console.error('AcceptBountyEscrow Error: ', error);
-    revalidatePath('/maintainer/escrow-requests');
+  }
+  finally {
+    revalidatePath('/maintainer/dashboard');
   }
 }
 
@@ -200,14 +199,55 @@ export async function releaseBountyEscrow({
   transactionSignature,
 }: ReleaseBountyProps) {
   try {
-    await db.bounty.update({
+    const bounty = await db.bounty.update({
       where: { id: bountyId },
       data: {
         status: BountyStatus.COMPLETED,
         signature: transactionSignature,
       },
+      select: {
+        amount: true,
+        issueNumber: true,
+        author: {
+          select: {
+            githubId: true,
+          }
+        },
+        receiver: {
+          select: {
+            githubId: true,
+          }
+        },
+        repository: {
+          select: {
+            name: true,
+            installationId: true,
+          }
+        }
+      }
     });
 
+    const payload: BountyReleasedDetail = {
+      owner: bounty.author.githubId,
+      repo: getRepoNameFromFullName(bounty.repository.name),
+      bounty: bounty.amount,
+      issueNumber: bounty.issueNumber,
+      installationId: bounty.repository.installationId,
+      authorGithubId: bounty.receiver!.githubId,
+      transactionSignature,
+    }
+
+    // Send fetch request to the github-app
+    const response = await fetch("http://localhost:3001/payobvio-github-app/escrow-released", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }); 
+
+    const responseBody = await response.json();
+    console.log('Released bounty escrow:', responseBody);
     revalidatePath('/maintainer/dashboard');
   } catch (error) {
     console.error('ReleaseBountyEscrow Error: ', error);
@@ -226,6 +266,13 @@ export async function releaseBountyEscrow({
 export async function rejectBountyEscrow(bountyId: number) {
   try {
     const detail = await getEscrowDetail(bountyId);
+
+    await db.bounty.update({
+      where: { id: bountyId },
+      data: {
+        status: BountyStatus.CANCELLED,
+      },
+    });
 
     // Send fetch request to the github-app
     const response = await fetch(
@@ -248,17 +295,8 @@ export async function rejectBountyEscrow(bountyId: number) {
 
     const responseBody = await response.json();
 
-    await db.bounty.update({
-      where: { id: bountyId },
-      data: {
-        status: BountyStatus.CANCELLED,
-      },
-    });
-
     console.log('Rejected bounty escrow:', responseBody);
     revalidatePath('/maintainer/escrow-requests');
-
-    // TODO: Redirect to Dashboard
   } catch (error) {
     console.error('RejectBountyEscrow Error: ', error);
   }

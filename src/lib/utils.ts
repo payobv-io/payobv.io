@@ -18,8 +18,8 @@ export function createLinkToIssue(repo: string, issue: number) {
   return `https://github.com/${repo}/issues/${issue}`
 }
 
-export function getRepoNameFromFullName(fullname: string) {
-  return fullname.split('/').at(-1);
+export function getRepoNameFromFullName(fullname: string): string {
+  return fullname.split('/').at(-1) ?? fullname;
 }
 
 export function createSolanaExplorerLink(signature: string) {

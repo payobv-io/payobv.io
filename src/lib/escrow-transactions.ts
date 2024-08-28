@@ -14,6 +14,7 @@ type EscrowProps = {
 type EscrowDepositResult = {
   escrowAddress: PublicKey;
   transactionSignature: string | null;
+  errorMessage?: string;
 };
 
 type EscrowReleaseResult = {
@@ -101,10 +102,10 @@ export async function initializeEscrowDeposit(
     if (err instanceof Error) {
       if (err.message.includes('User rejected the request')) {
         console.log('Transaction was rejected by the user');
-        // TODO: Handle transaction rejection (show toast or alert)
         return {
           escrowAddress: escrowAccount,
           transactionSignature: null,
+          errorMessage: 'Transaction was rejected by the user'
         };
       }
     }
