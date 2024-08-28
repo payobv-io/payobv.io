@@ -32,12 +32,12 @@ export default function TableAction({
     <div className="flex space-x-2 justify-center">
       <Button
         onClick={() => handleAcceptRequest(request)} 
-        size="sm" variant="outline" className="bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-700">
+        size="sm" variant="outline" className="bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-700 text-sm">
         Approve
       </Button>
       <Button
         onClick={() => handleRejectRequest(request)} 
-        size="sm" variant="outline" className="bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700">
+        size="sm" variant="outline" className="bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 text-sm">
         Reject
       </Button>
       <ConfirmationDialog
