@@ -21,7 +21,7 @@ export default async function BountyTable({
     <Table {...props}>
       <TableHeader>
         <TableRow>
-          <TableHead>Issue</TableHead>
+          <TableHead className="w-[400px]">Issue</TableHead>
           <TableHead>Repository</TableHead>
           <TableHead>Bounty</TableHead>
           <TableHead className="text-center">Status</TableHead>
@@ -33,7 +33,7 @@ export default async function BountyTable({
           bounties.length > 0 ?
           bounties.map((bounty) => (
             <TableRow key={bounty.id}>
-              <TableCell className="font-medium">
+              <TableCell className="font-medium w-[400px]">
                 <a 
                   href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} 
                   className="text-blue-600 hover:underline"
@@ -48,11 +48,12 @@ export default async function BountyTable({
                 </Badge>
               </TableCell>
               <TableCell>
+                {/* TODO: Add a copy to clipboard design */}
                 <a 
                   href={createSolanaExplorerLink(bounty.signature)} 
                   className="text-blue-600 hover:underline"
                   target="_blank"
-                >{bounty.signature}</a>
+                >Signature</a>
               </TableCell>
             </TableRow>
           ))

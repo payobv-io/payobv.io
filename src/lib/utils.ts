@@ -23,5 +23,5 @@ export function getRepoNameFromFullName(fullname: string): string {
 }
 
 export function createSolanaExplorerLink(signature: string) {
-  return `https://explorer.solana.com/tx/${signature}`;
+  return `https://explorer.solana.com/tx/${signature}?cluster=devnet`;
 }
