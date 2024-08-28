@@ -8,16 +8,21 @@ type SidebarProps = {
 
 export default function Sidebar({ links }: SidebarProps) {
   return (
-  <div className="flex h-full flex-col px-3 py-2 md:px-2 fixed z-20 md:w-64">
+  <div className="flex h-full flex-col px-3 py-2 md:px-2 fixed z-20 md:w-64 gap-y-4">
     <Link
-      className="mb-2 flex h-20 items-end justify-start rounded-md bg-black p-4 md:h-40"
+      className="mb-2 flex items-end justify-center rounded-md p-4 bg-white"
       href="/"
     >
-      <div className="w-32 text-white md:w-40">
-        payobv.io
+      <div className="w-32 md:w-40 flex text-2xl justify-center font-bold">
+        <span>
+          payobv.
+        </span>
+        <span className="text-blue-600">
+          io
+        </span>
       </div>
     </Link>
-    <div className="flex grow flex-row md:flex-col">
+    <div className="flex grow flex-row md:flex-col md:gap-y-2">
       <NavLinks links={links}/>
     </div>
   </div>)
