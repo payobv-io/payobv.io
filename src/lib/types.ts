@@ -50,3 +50,12 @@ export type OpenBountyDetail = {
   }
 }
 
+export type BountyReleasedDetail = {
+  owner: string,
+  repo: string,
+  bounty: number,
+  issueNumber: number,
+  installationId: number,
+  authorGithubId: string,
+  transactionSignature: string
+}
