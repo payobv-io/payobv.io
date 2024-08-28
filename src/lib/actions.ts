@@ -30,18 +30,18 @@ export async function getServerSessionID(): Promise<number | null> {
   return null;
 }
 
-export async function checkRootPageAccess(){
+export async function checkRootPageAccess() {
   const userId = await getServerSessionID();
 
-  if(userId){
+  if (userId) {
     const user = await findExistingUser(userId);
     const initialRepositoryRole = user?.initialRepositoryRole;
 
-    if(initialRepositoryRole){
-        if (initialRepositoryRole === RepositoryUserRole.MAINTAINER) {
-          return redirect('/maintainer/dashboard');
-        } else {
-          return redirect('/profile');
+    if (initialRepositoryRole) {
+      if (initialRepositoryRole === RepositoryUserRole.MAINTAINER) {
+        return redirect('/maintainer/dashboard');
+      } else {
+        return redirect('/profile');
       }
     }
   }
@@ -121,7 +121,6 @@ async function getEscrowDetail(bountyId: number) {
   };
 }
 
-// TODO: Add Escrow Logic
 /**
  * @param bountyId
  * @summary
@@ -132,6 +131,8 @@ async function getEscrowDetail(bountyId: number) {
  * 4. Update the bounty status to OPEN
  * 5. Add the transaction signature to the bounty table
  */
+// TODO: Add a new field to the escrow table to store the escrow transaction signature
+
 export async function acceptBountyEscrow({
   bountyId,
   transactionSignature,
@@ -140,7 +141,7 @@ export async function acceptBountyEscrow({
   try {
     const detail = await getEscrowDetail(bountyId);
 
-    console.log("Escrow Detail: ", detail);
+    console.log('Escrow Detail: ', detail);
 
     // Send fetch request to the github-app
     const response = await fetch(
@@ -167,10 +168,10 @@ export async function acceptBountyEscrow({
       where: { id: bountyId },
       data: {
         status: BountyStatus.OPEN,
-        signature: transactionSignature,
         escrow: {
           create: {
             accountAddress: escrowAddress,
+            //signature: transactionSignature,
           },
         },
       },
@@ -236,5 +237,3 @@ export async function rejectBountyEscrow(bountyId: number) {
     console.error('RejectBountyEscrow Error: ', error);
   }
 }
-
-
