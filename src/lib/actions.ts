@@ -171,7 +171,7 @@ export async function acceptBountyEscrow({
         escrow: {
           create: {
             accountAddress: escrowAddress,
-            //signature: transactionSignature,
+            signature: transactionSignature,
           },
         },
       },

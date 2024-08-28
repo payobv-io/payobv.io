@@ -33,6 +33,8 @@ export default function ConfirmationDialog({
 
   const handleApproveRequest = async () => {
     try {
+      console.log('Approving escrow request for issue #', selectedRequest.issueNumber);
+      console.log("Getting Escrow Deposit Result");
       const escrowDepositResult = await initializeEscrowDeposit(
         {
           wallet: wallet,
@@ -41,6 +43,7 @@ export default function ConfirmationDialog({
         }
       );
 
+      console.log("Escrow Deposit Result: ", escrowDepositResult);
       if (escrowDepositResult.transactionSignature) {
         await acceptBountyEscrow({
           bountyId: selectedRequest.id,
