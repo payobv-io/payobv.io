@@ -143,6 +143,22 @@ export async function acceptBountyEscrow({
 
     console.log('Escrow Detail: ', detail);
 
+    await db.bounty.update({
+      where: { id: bountyId },
+      data: {
+        status: BountyStatus.OPEN,
+        escrow: {
+          create: {
+            accountAddress: escrowAddress,
+            signature: transactionSignature,
+          },
+        },
+      },
+      include: {
+        escrow: true,
+      },
+    });
+
     // Send fetch request to the github-app
     const response = await fetch(
       'http://localhost:3001/payobvio-github-app/escrow',
@@ -164,28 +180,13 @@ export async function acceptBountyEscrow({
 
     const responseBody = await response.json();
 
-    await db.bounty.update({
-      where: { id: bountyId },
-      data: {
-        status: BountyStatus.OPEN,
-        escrow: {
-          create: {
-            accountAddress: escrowAddress,
-            signature: transactionSignature,
-          },
-        },
-      },
-      include: {
-        escrow: true,
-      },
-    });
-
     console.log('Approved bounty escrow:', responseBody);
     revalidatePath('/maintainer/escrow-requests');
 
     // TODO: Redirect to Dashboard
   } catch (error) {
     console.error('AcceptBountyEscrow Error: ', error);
+    revalidatePath('/maintainer/escrow-requests');
   }
 }
 
