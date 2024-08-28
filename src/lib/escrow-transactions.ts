@@ -1,12 +1,14 @@
 import { getProgram } from '@/anchor/client';
 import { BN, web3 } from '@coral-xyz/anchor';
 import { PublicKey } from '@solana/web3.js';
+import { findExistingUser } from './actions';
 import { solToLamports } from './utils';
 
-type InitEscrowProps = {
+type EscrowProps = {
   wallet: any;
   issueId: number;
   bountyAmount: number;
+  contributorId?: number;
 };
 
 type EscrowDepositResult = {
@@ -14,8 +16,22 @@ type EscrowDepositResult = {
   transactionSignature: string | null;
 };
 
+type EscrowReleaseResult = {
+  transactionSignature: string | null;
+};
+
+async function getEscrowAccount(wallet: any, issueId: number) {
+  const program = getProgram(wallet);
+  const [escrowAccount] = PublicKey.findProgramAddressSync(
+    [Buffer.from('escrow'), Buffer.from(issueId.toString())],
+    program.programId
+  );
+
+  return { program, escrowAccount };
+}
+
 export async function initializeEscrowDeposit(
-  props: InitEscrowProps
+  props: EscrowProps
 ): Promise<EscrowDepositResult> {
   if (!props.wallet || !props.wallet.publicKey) {
     console.error('Wallet is not connected');
@@ -25,12 +41,10 @@ export async function initializeEscrowDeposit(
     };
   }
 
-  const program = getProgram(props.wallet);
-  const [escrowAccount] = PublicKey.findProgramAddressSync(
-    [Buffer.from('escrow'), Buffer.from(props.issueId.toString())],
-    program.programId
+  const { program, escrowAccount } = await getEscrowAccount(
+    props.wallet,
+    props.issueId
   );
-
   let escrowAccountExists;
 
   try {
@@ -96,6 +110,59 @@ export async function initializeEscrowDeposit(
     }
 
     console.error('Error during escrow initialization or fund deposit:', err);
+    throw err;
+  }
+}
+
+export async function releaseEscrowFund(
+  props: EscrowProps
+): Promise<EscrowReleaseResult> {
+  if (!props.wallet || !props.wallet.publicKey) {
+    console.error('Wallet is not connected');
+    return {
+      transactionSignature: null,
+    };
+  }
+
+  const contributorData = await findExistingUser(props.contributorId!);
+  if (!contributorData || !contributorData.wallets) {
+    console.error('Contributor / contributor wallet not found');
+    return {
+      transactionSignature: null,
+    };
+  }
+
+  const { program, escrowAccount } = await getEscrowAccount(
+    props.wallet,
+    props.issueId
+  );
+
+  try {
+    const releaseEscrowTx = await program.methods
+      .releaseFunds()
+      .accounts({
+        maintainer: props.wallet.publicKey,
+        contributor: new PublicKey(contributorData.wallets[0].publicAddress),
+        escrowAccount: escrowAccount,
+        systemProgram: web3.SystemProgram.programId,
+      } as any)
+      .rpc();
+    console.log('Release transaction signature:', releaseEscrowTx);
+
+    return {
+      transactionSignature: releaseEscrowTx,
+    };
+  } catch (err: any) {
+    if (err instanceof Error) {
+      if (err.message.includes('Maintainer rejected the request')) {
+        console.log('Transaction was rejected by the Maintainer');
+        return {
+          transactionSignature: null,
+        };
+      }
+    }
+
+    console.error('Error during escrow release fund:', err);
     throw err;
   }
 }
