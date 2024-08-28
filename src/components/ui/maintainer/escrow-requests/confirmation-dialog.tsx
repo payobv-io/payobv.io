@@ -1,7 +1,7 @@
 import { acceptBountyEscrow, rejectBountyEscrow } from '@/lib/actions';
 import { initializeEscrowDeposit } from '@/lib/escrow-transactions';
-import { useWallet } from "@solana/wallet-adapter-react";
 import { EscrowRequestFromDb } from '@/lib/types';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { Button } from '../../button';
 import {
@@ -29,25 +29,27 @@ export default function ConfirmationDialog({
   setDialogOpen,
 }: DialogProps) {
   const wallet = useWallet();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const handleApproveRequest = async () => {
     try {
-      const escrowDepositResult = await initializeEscrowDeposit(
-        {
-          wallet: wallet,
-          issueId: selectedRequest.issueNumber,
-          bountyAmount: selectedRequest.amount,
-        }
+      console.log(
+        'Approving escrow request for issue #',
+        selectedRequest.issueNumber
       );
+      console.log('Getting Escrow Deposit Result');
+      const escrowDepositResult = await initializeEscrowDeposit({
+        wallet: wallet,
+        issueRepoId: `${selectedRequest.issueNumber}_${selectedRequest.repositoryId}`,
+        bountyAmount: selectedRequest.amount,
+      });
 
+      console.log('Escrow Deposit Result: ', escrowDepositResult);
       if (escrowDepositResult.transactionSignature) {
         await acceptBountyEscrow({
           bountyId: selectedRequest.id,
-          transactionSignature:
-            escrowDepositResult.transactionSignature!,
-          escrowAddress:
-            escrowDepositResult.escrowAddress.toString(),
+          transactionSignature: escrowDepositResult.transactionSignature!,
+          escrowAddress: escrowDepositResult.escrowAddress.toString(),
         });
       }
 
@@ -58,23 +60,23 @@ export default function ConfirmationDialog({
         description: `The escrow request for issue #${selectedRequest.issueNumber} has been approved.`,
         duration: 5000,
         variant: 'success',
-      })
+      });
     } catch (error) {
       let errorMessage = 'Failed to approve escrow request';
-      if(error instanceof Error) {
+      if (error instanceof Error) {
         errorMessage = error.message;
       }
       console.error(errorMessage);
-
+      setDialogOpen(false);
       // Show error toast
       toast({
         title: 'Error',
         description: errorMessage,
         duration: 5000,
         variant: 'alert',
-      })
+      });
     }
-  }
+  };
 
   const handleRejectRequest = () => {
     rejectBountyEscrow(selectedRequest.id);
@@ -83,8 +85,8 @@ export default function ConfirmationDialog({
       title: 'Escrow Request Rejected',
       description: `The escrow request for issue #${selectedRequest.issueNumber} has been rejected.`,
       duration: 5000,
-    })
-  }
+    });
+  };
 
   return (
     <Dialog open={open} onOpenChange={setDialogOpen}>
@@ -100,10 +102,7 @@ export default function ConfirmationDialog({
             </DialogHeader>
             <RequestDetail request={selectedRequest} />
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setDialogOpen(false)}
-              >
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
                 Cancel
               </Button>
               <Button
@@ -125,10 +124,7 @@ export default function ConfirmationDialog({
             </DialogHeader>
             <RequestDetail request={selectedRequest} />
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setDialogOpen(false)}
-              >
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>
                 Cancel
               </Button>
               <Button

@@ -257,7 +257,9 @@ export const getContributedBountyDetails = async (userId: number): Promise<Contr
     const bountyDetails = await db.bounty.findMany({
       where: {
         receiverId: userId,
-        status: BountyStatus.COMPLETED
+        status: {
+          in: [BountyStatus.COMPLETED, BountyStatus.RELEASING_ESCROW]
+        }
       },
       select: {
         id: true,
@@ -265,6 +267,7 @@ export const getContributedBountyDetails = async (userId: number): Promise<Contr
         title: true,
         amount: true,
         signature: true,
+        status: true,
         repository: {
           select: {
             name: true

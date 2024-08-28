@@ -2,6 +2,8 @@ import { db } from '@/db/db';
 import { bountyCreateSchema } from '@/lib/validations';
 import { NextRequest, NextResponse } from 'next/server';
 
+
+// TODO: Use try/catch block to catch errors
 export async function POST(req: NextRequest) {
   const responseData = await req.json();
   const parsedResponse = bountyCreateSchema.safeParse(responseData);

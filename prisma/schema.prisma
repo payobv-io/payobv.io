@@ -56,15 +56,15 @@ model RepositoryUser {
 }
 
 model Bounty {
-  id                Int          @id @default(autoincrement())
-  title             String // Issue title
-  author            User         @relation("AuthorBounties", fields: [authorId], references: [id])
-  authorId          Int
-  receiver          User?        @relation("ReceivedBounties", fields: [receiverId], references: [id])
-  receiverId        Int?
-  repository        Repository   @relation(fields: [repositoryId], references: [id])
-  repositoryId      Int
-  issueNumber       Int
+  id               Int   @id @default(autoincrement())
+  title            String // Issue title
+  author           User     @relation("AuthorBounties", fields: [authorId], references: [id])
+  authorId         Int
+  receiver         User?    @relation("ReceivedBounties", fields: [receiverId], references: [id])
+  receiverId       Int?
+  repository       Repository @relation(fields: [repositoryId], references: [id])
+  repositoryId     Int
+  issueNumber      Int
   pullRequestNumber Int?
   escrow            Escrow?      @relation(fields: [escrowId], references: [id])
   escrowId          Int?         @unique
@@ -79,12 +79,13 @@ model Bounty {
 }
 
 model Escrow {
-  id             Int          @id @default(autoincrement())
-  accountAddress String       @unique
-  status         EscrowStatus @default(FUNDED)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  bounty         Bounty?
+  id               Int   @id @default(autoincrement())
+  accountAddress   String   @unique
+  status           EscrowStatus @default(FUNDED)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  bounty           Bounty?
+  signature        String @unique
 }
 
 enum EscrowStatus {
@@ -106,6 +107,7 @@ enum RepositoryUserRole {
 enum BountyStatus {
   PENDING_ESCROW
   OPEN
+  RELEASING_ESCROW
   COMPLETED
   CANCELLED
 }
