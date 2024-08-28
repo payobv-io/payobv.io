@@ -26,7 +26,7 @@ export default function Header() {
     <header className="bg-white shadow-sm z-10 fixed w-full md:pl-64">
       <div className="sm:px-6 lg:px-3 flex justify-between items-center md:h-[56px]">
         <div className="flex items-center">
-          <span className="ml-2 font-semibold text-xl text-gray-900">
+          <span className="ml-2 font-semibold text-lg text-gray-900">
             {
               `${userType} Space`
             }
@@ -60,7 +60,6 @@ export default function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
             {userType === "Maintainer" ? (
               <Link href="/contributor/dashboard">
                 <DropdownMenuItem>Contributor</DropdownMenuItem>
