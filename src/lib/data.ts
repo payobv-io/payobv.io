@@ -202,7 +202,7 @@ export const getTotalMoneySpent = async (userId: number): Promise<number> => {
       where: {
         authorId: userId,
         status: {
-          in: [BountyStatus.COMPLETED, BountyStatus.OPEN],
+          in: [BountyStatus.COMPLETED, BountyStatus.OPEN, BountyStatus.RELEASING_ESCROW],
         },
       },
     });
