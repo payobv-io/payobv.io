@@ -37,7 +37,7 @@ export default function StatCard({
               <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
                 <div 
                   className="bg-blue-500 h-full rounded-full" 
-                  style={{width: `${(details.paid / (details.paid + details.escrowed)) * 100}%`}}
+                  style={{width: `${(details.paid == 0 && details.escrowed == 0) ? 0 : (details.paid / (details.paid + details.escrowed)) * 100}%`}}
                 ></div>
               </div>
               <div className="flex justify-between text-xs text-gray-500">

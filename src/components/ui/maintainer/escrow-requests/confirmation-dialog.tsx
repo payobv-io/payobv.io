@@ -13,6 +13,9 @@ import {
   DialogTitle,
 } from '../../dialog';
 import { useToast } from '../../use-toast';
+import { createLinkToIssue } from '@/lib/utils';
+import { useState } from 'react';
+import { SkewLoader } from 'react-spinners';
 
 type DialogProps = {
   open: boolean;
@@ -30,8 +33,10 @@ export default function ConfirmationDialog({
 }: DialogProps) {
   const wallet = useWallet();
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
   const handleApproveRequest = async () => {
+    setLoading(true);
     try {
       console.log(
         'Approving escrow request for issue #',
@@ -53,8 +58,6 @@ export default function ConfirmationDialog({
         });
       }
 
-      // Close the dialog and show success toast
-      setDialogOpen(false);
       toast({
         title: 'Escrow Request Approved',
         description: `The escrow request for issue #${selectedRequest.issueNumber} has been approved.`,
@@ -67,7 +70,6 @@ export default function ConfirmationDialog({
         errorMessage = error.message;
       }
       console.error(errorMessage);
-      setDialogOpen(false);
       // Show error toast
       toast({
         title: 'Error',
@@ -75,6 +77,10 @@ export default function ConfirmationDialog({
         duration: 5000,
         variant: 'alert',
       });
+    }
+    finally {
+      setDialogOpen(false);
+      setLoading(false);
     }
   };
 
@@ -102,14 +108,28 @@ export default function ConfirmationDialog({
             </DialogHeader>
             <RequestDetail request={selectedRequest} />
             <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button 
+                disabled={loading}
+                variant="outline" 
+                onClick={() => setDialogOpen(false)}>
                 Cancel
               </Button>
               <Button
                 onClick={handleApproveRequest}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                disabled={loading}
+                className={`bg-green-600 text-white w-[113px] hover:bg-green-700 ${loading ? "disabled:opacity-80" : ""}`}
               >
-                <CheckIcon className="mr-2 h-4 w-4" /> Approve
+                {
+                  loading 
+                  ? <SkewLoader
+                      color="#ffffff"
+                      size={10}
+                    />
+                  : 
+                  <>
+                    <CheckIcon className="mr-2 h-4 w-4" /> <span>Approve</span>
+                  </>
+                }
               </Button>
             </DialogFooter>
           </>
@@ -146,7 +166,16 @@ function RequestDetail({ request }: { request: EscrowRequestFromDb }) {
     <div className="py-4">
       <p className="text-sm text-gray-500">
         Issue:{' '}
-        <span className="font-medium text-gray-900">{request.issueNumber}</span>
+        <a
+          href={createLinkToIssue(
+            request.repository.name,
+            request.issueNumber
+          )}
+          target="_blank"
+          className="text-blue-600 hover:underline"
+        >
+          #{request.issueNumber}
+        </a>
       </p>
       <p className="text-sm text-gray-500">
         Amount:{' '}
