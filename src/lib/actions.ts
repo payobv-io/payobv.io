@@ -20,6 +20,10 @@ interface AcceptBountyProps {
   transactionSignature: string;
   escrowAddress: string;
 }
+interface ReleaseBountyProps {
+  bountyId: number;
+  transactionSignature: string;
+}
 
 export async function getServerSessionID(): Promise<number | null> {
   const session = await getServerSession(options);
@@ -187,6 +191,27 @@ export async function acceptBountyEscrow({
   } catch (error) {
     console.error('AcceptBountyEscrow Error: ', error);
     revalidatePath('/maintainer/escrow-requests');
+  }
+}
+
+// TODO: Remove status field from escrow table
+export async function releaseBountyEscrow({
+  bountyId,
+  transactionSignature,
+}: ReleaseBountyProps) {
+  try {
+    await db.bounty.update({
+      where: { id: bountyId },
+      data: {
+        status: BountyStatus.COMPLETED,
+        signature: transactionSignature,
+      },
+    });
+
+    revalidatePath('/maintainer/dashboard');
+  } catch (error) {
+    console.error('ReleaseBountyEscrow Error: ', error);
+    revalidatePath('/maintainer/dashboard');
   }
 }
 
