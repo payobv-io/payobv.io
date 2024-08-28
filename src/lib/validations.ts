@@ -9,8 +9,10 @@ export const bountyCreateSchema = z.object({
 });
 
 export const bountyReleaseSchema = z.object({
+  repositoryId: z.number(),
   issueNumber: z.number(),
   receiverId: z.number(),
+  pullRequestNumber: z.number(),
 });
 
 export const installationCreateSchema = z.object({

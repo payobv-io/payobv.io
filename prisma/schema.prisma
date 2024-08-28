@@ -5,84 +5,86 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model User {
-  id                    Int @id // Same as the GitHub user ID
-  githubId              String  @unique
-  email                 String? @unique
+  id                    Int                 @id // Same as the GitHub user ID
+  githubId              String              @unique
+  email                 String?             @unique
   initialRepositoryRole RepositoryUserRole?
-  role                  UserRole @default(USER)
-  joinedAt              DateTime @default(now())
+  role                  UserRole            @default(USER)
+  joinedAt              DateTime            @default(now())
   wallets               Wallet[]
   RepositoryUser        RepositoryUser[]
-  authoredBounties      Bounty[] @relation("AuthorBounties")
-  receivedBounties      Bounty[] @relation("ReceivedBounties")
+  authoredBounties      Bounty[]            @relation("AuthorBounties")
+  receivedBounties      Bounty[]            @relation("ReceivedBounties")
 
   @@index([githubId])
 }
 
 model Wallet {
-  id     Int     @id @default(autoincrement())
-  userId Int
-  owner   User    @relation(fields: [userId], references: [id])
+  id            Int    @id @default(autoincrement())
+  userId        Int
+  owner         User   @relation(fields: [userId], references: [id])
   publicAddress String @unique
 }
 
 model Repository {
-  id            Int   @id   // Same as the GitHub repository ID 
-  name          String      // Repository full name (owner/name)
+  id             Int              @id // Same as the GitHub repository ID 
+  name           String // Repository full name (owner/name)
   installationId Int
-  isPrivate     Boolean
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  isPrivate      Boolean
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   RepositoryUser RepositoryUser[]
-  bounties Bounty[]
+  bounties       Bounty[]
 }
 
 model RepositoryUser {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  repositoryId  Int
-  role          RepositoryUserRole     @default(MAINTAINER)
-  user          User     @relation(fields: [userId], references: [id])
-  repository    Repository @relation(fields: [repositoryId], references: [id])
-  createdAt     DateTime @default(now())
-  
-  @@unique([userId, repositoryId, role]) 
+  id           Int                @id @default(autoincrement())
+  userId       Int
+  repositoryId Int
+  role         RepositoryUserRole @default(MAINTAINER)
+  user         User               @relation(fields: [userId], references: [id])
+  repository   Repository         @relation(fields: [repositoryId], references: [id])
+  createdAt    DateTime           @default(now())
+
+  @@unique([userId, repositoryId, role])
 }
 
 model Bounty {
-  id               Int   @id @default(autoincrement())
-  title            String // Issue title
-  author           User     @relation("AuthorBounties", fields: [authorId], references: [id])
-  authorId         Int
-  receiver         User?    @relation("ReceivedBounties", fields: [receiverId], references: [id])
-  receiverId       Int?
-  repository       Repository @relation(fields: [repositoryId], references: [id])
-  repositoryId     Int
-  issueNumber      Int
+  id                Int          @id @default(autoincrement())
+  title             String // Issue title
+  author            User         @relation("AuthorBounties", fields: [authorId], references: [id])
+  authorId          Int
+  receiver          User?        @relation("ReceivedBounties", fields: [receiverId], references: [id])
+  receiverId        Int?
+  repository        Repository   @relation(fields: [repositoryId], references: [id])
+  repositoryId      Int
+  issueNumber       Int
   pullRequestNumber Int?
-  escrow           Escrow?  @relation(fields: [escrowId], references: [id])
-  escrowId         Int?  @unique
-  amount           Float
-  status           BountyStatus @default(PENDING_ESCROW)
-  signature        String?
-  transactionId    Int?  @unique
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  escrow            Escrow?      @relation(fields: [escrowId], references: [id])
+  escrowId          Int?         @unique
+  amount            Float
+  status            BountyStatus @default(PENDING_ESCROW)
+  signature         String?
+  transactionId     Int?         @unique
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@unique([issueNumber, repositoryId])
 }
 
 model Escrow {
-  id               Int   @id @default(autoincrement())
-  accountAddress   String   @unique
-  status           EscrowStatus @default(FUNDED)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  bounty           Bounty?
+  id             Int          @id @default(autoincrement())
+  accountAddress String       @unique
+  status         EscrowStatus @default(FUNDED)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  bounty         Bounty?
 }
 
 enum EscrowStatus {
