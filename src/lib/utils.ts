@@ -21,3 +21,7 @@ export function createLinkToIssue(repo: string, issue: number) {
 export function getRepoNameFromFullName(fullname: string) {
   return fullname.split('/').at(-1);
 }
+
+export function createSolanaExplorerLink(signature: string) {
+  return `https://explorer.solana.com/tx/${signature}`;
+}

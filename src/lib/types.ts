@@ -33,6 +33,7 @@ export type ContributedBountyDetail = {
   issueNumber: number,
   title: string,
   amount: number,
+  status: BountyStatus,
   signature: string,
   repository: {
     name: string
