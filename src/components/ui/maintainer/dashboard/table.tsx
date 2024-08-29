@@ -34,7 +34,7 @@ export default async function BountyTable({
           <TableHead>Contributor</TableHead>
           <TableHead>Bounty</TableHead>
           <TableHead className="text-center">Status</TableHead>
-          <TableHead className="text-center">Action</TableHead>
+          <TableHead className="text-center w-[200px]">Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -61,7 +61,7 @@ export default async function BountyTable({
                   {bountyStatusDetails[bounty.status].label}
                 </Badge>
               </TableCell>
-              <TableCell className="text-center">
+              <TableCell className="text-center w-[200px]">
                 {bounty.status === BountyStatus.RELEASING_ESCROW ? (
                   <ReleaseConfirmButton
                     bountyId={bounty.id}

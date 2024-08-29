@@ -64,7 +64,7 @@ const ReleaseConfirmButton = (props: ReleaseConfirmButtonProps) => {
       }}
       size="sm"
       variant="outline"
-      className="bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-700 text-sm"
+      className="bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-700 text-sm w-[140px]"
     >
       {loading ? (
         <SkewLoader color="#16a34a" size={10} />

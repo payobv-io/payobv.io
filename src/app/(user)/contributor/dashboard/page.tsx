@@ -14,10 +14,7 @@ export default async function Page() {
   return (
     <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 h-full">
       <div className="container mx-auto px-6 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-semibold text-gray-800">Dashboard</h1>
-          <WalletCard />
-        </div>
+        <h1 className="text-3xl font-semibold text-gray-800  mb-6">Dashboard</h1>
 
         <CardWrapper userId={userID} />
 

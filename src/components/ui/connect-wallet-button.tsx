@@ -34,7 +34,6 @@ export default function ConnectWalletButton() {
 
   return (
     <Button
-      variant="outline"
       onClick={handleConnectWallet}
       className="flex items-center gap-x-2"
     >
