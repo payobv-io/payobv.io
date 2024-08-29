@@ -2,12 +2,12 @@ import { ClusterProvider } from '@/components/cluster/cluster-data-access';
 import { SolanaProvider } from '@/components/solana/solana-provider';
 import { Metadata } from 'next';
 
+import { Toaster } from '@/components/ui/toaster';
 import SessionWrapper from '@/context/session-wrapper';
 import { cn } from '@/lib/utils';
 import { Inter as FontSans } from 'next/font/google';
 import './global.css';
 import { ReactQueryProvider } from './react-query-provider';
-import { Toaster } from '@/components/ui/toaster';
 
 const fontSans = FontSans({
   subsets: ['latin'],

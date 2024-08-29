@@ -27,18 +27,23 @@ export async function POST(req: NextRequest) {
         pullRequestNumber: data.pullRequestNumber,
       },
     });
-  
+
     if (!updateBounty) {
       return NextResponse.json(
         { message: 'Failed to update bounty' },
         { status: 500 }
       );
     }
-    
-    return NextResponse.json({ message: 'Bounty updated', bounty: updateBounty.amount }, { status: 200 });
-    
+
+    return NextResponse.json(
+      { message: 'Bounty updated', bounty: updateBounty.amount },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error updating bounty to RELEASE ESCROW: ', error);
-    return NextResponse.json({ message: 'Failed to update bounty' }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Failed to update bounty' },
+      { status: 500 }
+    );
   }
 }

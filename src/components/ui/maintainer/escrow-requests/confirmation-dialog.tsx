@@ -1,8 +1,11 @@
 import { acceptBountyEscrow, rejectBountyEscrow } from '@/lib/actions';
 import { initializeEscrowDeposit } from '@/lib/escrow-transactions';
 import { EscrowRequestFromDb } from '@/lib/types';
+import { createLinkToIssue } from '@/lib/utils';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { CheckIcon, XIcon } from 'lucide-react';
+import { useState } from 'react';
+import { SkewLoader } from 'react-spinners';
 import { Button } from '../../button';
 import {
   Dialog,
@@ -13,9 +16,6 @@ import {
   DialogTitle,
 } from '../../dialog';
 import { useToast } from '../../use-toast';
-import { createLinkToIssue } from '@/lib/utils';
-import { useState } from 'react';
-import { SkewLoader } from 'react-spinners';
 
 type DialogProps = {
   open: boolean;
@@ -56,7 +56,7 @@ export default function ConfirmationDialog({
           transactionSignature: escrowDepositResult.transactionSignature!,
           escrowAddress: escrowDepositResult.escrowAddress.toString(),
         });
-      } else{
+      } else {
         throw new Error(escrowDepositResult.errorMessage);
       }
 
@@ -79,8 +79,7 @@ export default function ConfirmationDialog({
         duration: 5000,
         variant: 'alert',
       });
-    }
-    finally {
+    } finally {
       setDialogOpen(false);
       setLoading(false);
     }
@@ -110,28 +109,27 @@ export default function ConfirmationDialog({
             </DialogHeader>
             <RequestDetail request={selectedRequest} />
             <DialogFooter>
-              <Button 
+              <Button
                 disabled={loading}
-                variant="outline" 
-                onClick={() => setDialogOpen(false)}>
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
                 Cancel
               </Button>
               <Button
                 onClick={handleApproveRequest}
                 disabled={loading}
-                className={`bg-green-600 text-white w-[113px] hover:bg-green-700 ${loading ? "disabled:opacity-80" : ""}`}
+                className={`bg-green-600 text-white w-[113px] hover:bg-green-700 ${
+                  loading ? 'disabled:opacity-80' : ''
+                }`}
               >
-                {
-                  loading 
-                  ? <SkewLoader
-                      color="#ffffff"
-                      size={10}
-                    />
-                  : 
+                {loading ? (
+                  <SkewLoader color="#ffffff" size={10} />
+                ) : (
                   <>
                     <CheckIcon className="mr-2 h-4 w-4" /> <span>Approve</span>
                   </>
-                }
+                )}
               </Button>
             </DialogFooter>
           </>
@@ -169,10 +167,7 @@ function RequestDetail({ request }: { request: EscrowRequestFromDb }) {
       <p className="text-sm text-gray-500">
         Issue:{' '}
         <a
-          href={createLinkToIssue(
-            request.repository.name,
-            request.issueNumber
-          )}
+          href={createLinkToIssue(request.repository.name, request.issueNumber)}
           target="_blank"
           className="text-blue-600 hover:underline"
         >

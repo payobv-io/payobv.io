@@ -105,7 +105,7 @@ export async function initializeEscrowDeposit(
         return {
           escrowAddress: escrowAccount,
           transactionSignature: null,
-          errorMessage: 'Transaction was rejected by the user'
+          errorMessage: 'Transaction was rejected by the user',
         };
       }
     }

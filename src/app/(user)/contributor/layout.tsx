@@ -1,10 +1,14 @@
-import Sidebar from "@/components/ui/sidebar";
-import { Gem, LayoutDashboardIcon } from "lucide-react";
+import Sidebar from '@/components/ui/sidebar';
+import { Gem, LayoutDashboardIcon } from 'lucide-react';
 
 const links = [
-  { name: "Dashboard", href: "/contributor/dashboard", icon: <LayoutDashboardIcon /> },
-  { name: "Open Bounties", href: "/contributor/open-bounties", icon: <Gem />  }
-]
+  {
+    name: 'Dashboard',
+    href: '/contributor/dashboard',
+    icon: <LayoutDashboardIcon />,
+  },
+  { name: 'Open Bounties', href: '/contributor/open-bounties', icon: <Gem /> },
+];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar links={links} />
       </div>
       <div className="flex-grow md:overflow-y-auto">
-        <div className="md:pt-[56px] h-screen">
-          {children} 
-        </div>
+        <div className="md:pt-[56px] h-screen">{children}</div>
       </div>
     </>
   );

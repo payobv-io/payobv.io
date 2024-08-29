@@ -1,4 +1,4 @@
-import { PrismaClient, RepositoryUserRole, BountyStatus } from '@prisma/client';
+import { BountyStatus, PrismaClient, RepositoryUserRole } from '@prisma/client';
 
 const prismaClientSingleton = () => {
   return new PrismaClient({ log: ['query'] });
@@ -10,6 +10,6 @@ declare const globalThis: {
 
 const db = globalThis.prismaGlobal ?? prismaClientSingleton();
 
-export { db, RepositoryUserRole, BountyStatus };
+export { BountyStatus, db, RepositoryUserRole };
 
 if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = db;

@@ -15,7 +15,7 @@ export function solToLamports(sol: number) {
 }
 
 export function createLinkToIssue(repo: string, issue: number) {
-  return `https://github.com/${repo}/issues/${issue}`
+  return `https://github.com/${repo}/issues/${issue}`;
 }
 
 export function getRepoNameFromFullName(fullname: string): string {

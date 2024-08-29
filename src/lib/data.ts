@@ -1,3 +1,4 @@
+import { BountyStatus, db } from '@/db/db';
 import {
   ContributedBountyDetail,
   ContributionDetails,
@@ -5,7 +6,6 @@ import {
   OpenBountyDetail,
   PaidBountyDetails,
 } from './types';
-import { db, BountyStatus } from "@/db/db"
 
 /**
  * Fetches all the escrow requests for the maintainer
@@ -202,7 +202,11 @@ export const getTotalMoneySpent = async (userId: number): Promise<number> => {
       where: {
         authorId: userId,
         status: {
-          in: [BountyStatus.COMPLETED, BountyStatus.OPEN, BountyStatus.RELEASING_ESCROW],
+          in: [
+            BountyStatus.COMPLETED,
+            BountyStatus.OPEN,
+            BountyStatus.RELEASING_ESCROW,
+          ],
         },
       },
     });
@@ -267,8 +271,8 @@ export const getContributionDetails = async (
 
 /**
  * Fetches the contributed bounty details for the maintainer
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns Contributed bounty details for the maintainer
  * @example of the return value:
  * [
@@ -283,9 +287,11 @@ export const getContributionDetails = async (
  *  },
  * ...
  * ]
- * 
+ *
  */
-export const getContributedBountyDetails = async (userId: number): Promise<ContributedBountyDetail[] | []> => {
+export const getContributedBountyDetails = async (
+  userId: number
+): Promise<ContributedBountyDetail[] | []> => {
   try {
     const bountyDetails = await db.bounty.findMany({
       where: {
@@ -314,11 +320,11 @@ export const getContributedBountyDetails = async (userId: number): Promise<Contr
     console.error('Error fetching contributed bounty details:', error);
     return [];
   }
-}
+};
 
 /**
  * Fetches the open bounties
- * 
+ *
  * @returns Open bounties
  * @example of the return value:
  * [
@@ -331,13 +337,13 @@ export const getContributedBountyDetails = async (userId: number): Promise<Contr
  *  },
  * ...
  * ]
- * 
+ *
  */
 export const getOpenBounties = async (): Promise<OpenBountyDetail[]> => {
   try {
     const bounties = await db.bounty.findMany({
       where: {
-        status: BountyStatus.OPEN
+        status: BountyStatus.OPEN,
       },
       select: {
         id: true,
@@ -347,15 +353,15 @@ export const getOpenBounties = async (): Promise<OpenBountyDetail[]> => {
         createdAt: true,
         repository: {
           select: {
-            name: true
-          }
-        }
-      }
-    })
+            name: true,
+          },
+        },
+      },
+    });
 
-    return bounties
+    return bounties;
   } catch (error) {
-    console.error('Error fetching open bounties:', error)
-    return []
+    console.error('Error fetching open bounties:', error);
+    return [];
   }
-}
+};

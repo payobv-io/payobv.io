@@ -1,7 +1,8 @@
-import { getServerSessionID } from '@/lib/actions';
-import { getEscrowRequests, getOpenBounties } from '@/lib/data';
+import { getOpenBounties } from '@/lib/data';
 import { createLinkToIssue } from '@/lib/utils';
+import { SearchIcon } from 'lucide-react';
 import { Card } from '../../card';
+import EmptyState from '../../empty-state';
 import {
   Table,
   TableBody,
@@ -10,11 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from '../../table';
-import { SearchIcon } from 'lucide-react';
-import EmptyState from '../../empty-state';
 
 export default async function EscrowRequestTable() {
-
   const openBounties = await getOpenBounties();
 
   return (
@@ -29,8 +27,7 @@ export default async function EscrowRequestTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {
-          openBounties.length > 0 ?
+          {openBounties.length > 0 ? (
             openBounties.map((request) => (
               <TableRow key={request.id}>
                 <TableCell className="font-medium w-[400px]">
@@ -50,17 +47,16 @@ export default async function EscrowRequestTable() {
                 <TableCell>{request.createdAt.toDateString()}</TableCell>
               </TableRow>
             ))
-          : (
+          ) : (
             <TableRow>
               <TableCell colSpan={5} className="text-center">
                 <EmptyState
-                  message="No escrow requests found, start by creating a bounty in Github" 
+                  message="No escrow requests found, start by creating a bounty in Github"
                   icon={SearchIcon}
                 />
               </TableCell>
             </TableRow>
-          )
-        }
+          )}
         </TableBody>
       </Table>
     </Card>
