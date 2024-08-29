@@ -1,6 +1,7 @@
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { SOLANA_NETWORK } from './constants';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,6 +23,6 @@ export function getRepoNameFromFullName(fullname: string): string {
   return fullname.split('/').at(-1) ?? fullname;
 }
 
-export function createSolanaExplorerLink(signature: string) {
-  return `https://explorer.solana.com/tx/${signature}?cluster=devnet`;
+export function createSolanaExplorerLink(signature: string, cluster: string = SOLANA_NETWORK) {
+  return `https://explorer.solana.com/tx/${signature}?cluster=${cluster}`;
 }

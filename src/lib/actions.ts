@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { BountyReleasedDetail } from './types';
 import { getRepoNameFromFullName } from './utils';
+import { ENDPOINTS, GITHUB_APP_API_BASE_URL } from './constants';
 
 interface WalletProps {
   publicAddress: string;
@@ -163,9 +164,11 @@ export async function acceptBountyEscrow({
       },
     });
 
+    const url = `${GITHUB_APP_API_BASE_URL}${ENDPOINTS.ESCROW}`;
+
     // Send fetch request to the github-app
     const response = await fetch(
-      'http://localhost:3001/payobvio-github-app/escrow',
+      url,
       {
         method: 'POST',
         headers: {
@@ -236,9 +239,11 @@ export async function releaseBountyEscrow({
       transactionSignature,
     };
 
+    const url = `${GITHUB_APP_API_BASE_URL}${ENDPOINTS.ESCROW_RELEASED}`;
+
     // Send fetch request to the github-app
     const response = await fetch(
-      'http://localhost:3001/payobvio-github-app/escrow-released',
+      url,
       {
         method: 'POST',
         headers: {
@@ -276,9 +281,11 @@ export async function rejectBountyEscrow(bountyId: number) {
       },
     });
 
+    const url = `${GITHUB_APP_API_BASE_URL}${ENDPOINTS.ESCROW}`;
+
     // Send fetch request to the github-app
     const response = await fetch(
-      'http://localhost:3001/payobvio-github-app/escrow',
+      url,
       {
         method: 'POST',
         headers: {
