@@ -11,16 +11,15 @@ export default function WalletCard() {
   const query = useGetBalance({ address: publicKey! });
 
   return (
-    <Card>
-      <CardContent className="flex items-center justify-between p-3">
+    <Card className='rounded-md'>
+      <CardContent className="flex items-center justify-center p-2">
         <div className="flex items-center gap-x-4">
-          <WalletIcon className="text-blue-500" />
           <div className="flex gap-x-2 items-center">
             <p className="font-bold text-gray-900">
               {query.data ? lamportsToSol(query.data) : '...'} SOL
             </p>
             <RefreshCw
-              className="w-4 h-4 cursor-pointer"
+              className="w-4 h-4 cursor-pointer text-blue-600"
               onClick={() => {
                 query.refetch();
               }}
