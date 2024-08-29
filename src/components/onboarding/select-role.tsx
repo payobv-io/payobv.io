@@ -20,7 +20,7 @@ export const SelectRole = () => {
       const installationUrl = `https://github.com/apps/payobvio-github-app/installations/new`;
       window.location.href = installationUrl;
     } else {
-      router.push('/profile');
+      router.push('/contributor/dashboard');
     }
   };
   const options = [
