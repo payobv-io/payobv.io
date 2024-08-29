@@ -137,4 +137,21 @@ const TableSkeleton = () => {
 }
 
 
-export { Skeleton, SkeletonStatCard, TableSkeleton }
+const WalletCardSkeleton = () => {
+  return (
+    <Card>
+      <CardContent className="flex items-center justify-between p-3">
+        <div className="flex items-center gap-x-4">
+          <Skeleton className="h-6 w-6 rounded-full" />
+          <div className="flex gap-x-2 items-center">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-4 rounded-full" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+
+export { Skeleton, SkeletonStatCard, TableSkeleton, WalletCardSkeleton }

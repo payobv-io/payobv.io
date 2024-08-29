@@ -1,13 +1,18 @@
-import EscrowRequestTable from '@/components/ui/maintainer/escrow-requests/table';
+import { Card } from "@/components/ui/card";
+import OpenBountiesTable from "@/components/ui/contributor/open-bounties/table";
+import { TableSkeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
-    <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 h-full">
-      <div className="container mx-auto px-6 py-8 flex flex-col gap-y-6">
-        <h1 className="text-3xl font-semibold text-gray-800">Bounties</h1>
+    <div className="container mx-auto px-6 py-8 flex flex-col gap-y-6">
+      <h1 className="text-3xl font-semibold text-gray-800">Open Bounties</h1>
 
-        <EscrowRequestTable />
-      </div>
-    </main>
+      <Card>
+        <Suspense fallback={<TableSkeleton />}>
+          <OpenBountiesTable />
+        </Suspense>
+      </Card>
+    </div>
   );
 }
