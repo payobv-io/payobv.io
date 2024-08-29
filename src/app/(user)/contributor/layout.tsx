@@ -13,7 +13,7 @@ const links = [
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="w-full flex-none md:w-64 relative">
+      <div className="w-full flex-none md:w-64 relative z-20 bg-white">
         <Sidebar links={links} />
       </div>
       <div className="flex-grow md:overflow-y-auto">
