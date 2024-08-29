@@ -47,7 +47,7 @@ export async function checkRootPageAccess() {
       if (initialRepositoryRole === RepositoryUserRole.MAINTAINER) {
         return redirect('/maintainer/dashboard');
       } else {
-        return redirect('/profile');
+        return redirect('/contributor/dashboard');
       }
     }
   }

@@ -24,7 +24,7 @@ export default async function Page({ searchParams }: any) {
         if (user.initialRepositoryRole == RepositoryUserRole.MAINTAINER) {
           return redirect('/maintainer/dashboard');
         } else {
-          return redirect('/profile');
+          return redirect('/contributor/dashboard');
         }
       }
       if (validTypes.includes(searchParamsValue)) {
