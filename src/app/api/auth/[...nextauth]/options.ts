@@ -58,7 +58,7 @@ export const options: AuthOptions = {
   callbacks: {
     async jwt({ token, profile }) {
       if (profile) {
-        addUserData(profile as GithubUser);
+        await addUserData(profile as GithubUser);
       }
       return token;
     },
