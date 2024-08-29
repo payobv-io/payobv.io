@@ -10,7 +10,7 @@ type SidebarProps = {
 export default function Sidebar({ links }: SidebarProps) {
   return (
     <div className="flex h-full flex-col justify-between px-3 pt-2 pb-6 md:px-2 fixed md:w-64">
-      <div className='flex flex-col gap-y-4'>
+      <div className="flex flex-col gap-y-4">
         <Link
           className="mb-2 flex items-end justify-center rounded-md p-4"
           href="/"
@@ -24,8 +24,8 @@ export default function Sidebar({ links }: SidebarProps) {
           <NavLinks links={links} />
         </div>
       </div>
-      <div className='px-3'>
-        {/* <WalletDetailsContainer /> */}
+      <div className="px-3">
+        <WalletDetailsContainer />
       </div>
     </div>
   );
