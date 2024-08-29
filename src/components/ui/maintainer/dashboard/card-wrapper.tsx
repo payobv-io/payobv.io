@@ -17,10 +17,17 @@ type CardWrapperProps = {
 };
 
 export default async function CardWrapper({ userId }: CardWrapperProps) {
-  const paidBountyDetails = await getPaidBountyDetails(userId);
-  const totalMoneySpent = await getTotalMoneySpent(userId);
-  const totalRepositories = await getTotalRepositories(userId);
-  const totalContributors = await getTotalUniqueContributors(userId);
+  const [
+    paidBountyDetails,
+    totalMoneySpent,
+    totalRepositories,
+    totalContributors,
+  ] = await Promise.all([
+    getPaidBountyDetails(userId),
+    getTotalMoneySpent(userId),
+    getTotalRepositories(userId),
+    getTotalUniqueContributors(userId),
+  ]);
 
   return (
     <div className="grid gap-6 mb-8 md:grid-cols-3">

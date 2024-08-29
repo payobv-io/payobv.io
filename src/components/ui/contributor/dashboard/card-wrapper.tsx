@@ -7,8 +7,7 @@ type CardWrapperProps = {
 };
 
 export default async function CardWrapper({ userId }: CardWrapperProps) {
-  const { totalAmount, totalBounties, repositoryCount } =
-    await getContributionDetails(userId);
+  const { totalAmount, totalBounties, repositoryCount } = await getContributionDetails(userId);
 
   return (
     <div className="grid gap-6 mb-8 md:grid-cols-3">
