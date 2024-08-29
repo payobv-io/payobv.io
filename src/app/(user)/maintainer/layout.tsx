@@ -14,7 +14,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
       <div className="flex-grow md:overflow-y-auto">
         <div className="md:pt-[56px] h-screen">
-          {children} 
+          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 h-full">
+            {children} 
+          </main>
         </div>
       </div>
     </>
