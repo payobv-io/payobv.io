@@ -3,10 +3,10 @@
 import { releaseBountyEscrow } from '@/lib/actions';
 import { releaseEscrowFund } from '@/lib/escrow-transactions';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Button } from '../../button';
-import { useToast } from '../../use-toast';
 import { useState } from 'react';
 import { SkewLoader } from 'react-spinners';
+import { Button } from '../../button';
+import { useToast } from '../../use-toast';
 
 type ReleaseConfirmButtonProps = {
   bountyId: number;
@@ -52,8 +52,7 @@ const ReleaseConfirmButton = (props: ReleaseConfirmButtonProps) => {
             duration: 5000,
             variant: 'alert',
           });
-        }
-        finally {
+        } finally {
           setLoading(false);
         }
       }}
@@ -61,15 +60,11 @@ const ReleaseConfirmButton = (props: ReleaseConfirmButtonProps) => {
       variant="outline"
       className="bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-700 text-sm"
     >
-      {
-        loading 
-        ? <SkewLoader
-            color="#16a34a"
-            size={10}
-          />
-        : 
+      {loading ? (
+        <SkewLoader color="#16a34a" size={10} />
+      ) : (
         <span>Confirm Release</span>
-      }
+      )}
     </Button>
   );
 };

@@ -1,4 +1,4 @@
-import EscrowRequestTable from "@/components/ui/maintainer/escrow-requests/table";
+import EscrowRequestTable from '@/components/ui/maintainer/escrow-requests/table';
 
 export default function Page() {
   return (
@@ -9,5 +9,5 @@ export default function Page() {
         <EscrowRequestTable />
       </div>
     </main>
-  )
+  );
 }

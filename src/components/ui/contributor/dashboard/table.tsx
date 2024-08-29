@@ -1,21 +1,27 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getContributedBountyDetails } from "@/lib/data";
-import { createLinkToIssue, createSolanaExplorerLink } from "@/lib/utils";
-import EmptyState from "../../empty-state";
-import { SearchIcon } from "lucide-react";
-import { bountyStatusDetails } from "@/lib/constants";
-import { Badge } from "../../badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { bountyStatusDetails } from '@/lib/constants';
+import { getContributedBountyDetails } from '@/lib/data';
+import { createLinkToIssue, createSolanaExplorerLink } from '@/lib/utils';
+import { SearchIcon } from 'lucide-react';
+import { Badge } from '../../badge';
+import EmptyState from '../../empty-state';
 
-type BountyTableProps = React.ComponentPropsWithRef<"table"> &
-{
-  userId: number
-}
+type BountyTableProps = React.ComponentPropsWithRef<'table'> & {
+  userId: number;
+};
 
 export default async function BountyTable({
   userId,
   ...props
 }: BountyTableProps) {
-  const bounties = await getContributedBountyDetails(userId)
+  const bounties = await getContributedBountyDetails(userId);
 
   return (
     <Table {...props}>
@@ -29,16 +35,20 @@ export default async function BountyTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {
-          bounties.length > 0 ?
+        {bounties.length > 0 ? (
           bounties.map((bounty) => (
             <TableRow key={bounty.id}>
               <TableCell className="font-medium w-[400px]">
-                <a 
-                  href={createLinkToIssue(bounty.repository.name, bounty.issueNumber)} 
+                <a
+                  href={createLinkToIssue(
+                    bounty.repository.name,
+                    bounty.issueNumber
+                  )}
                   className="text-blue-600 hover:underline"
                   target="_blank"
-                >{bounty.title}</a>
+                >
+                  {bounty.title}
+                </a>
               </TableCell>
               <TableCell>{bounty.repository.name}</TableCell>
               <TableCell>{bounty.amount} SOL</TableCell>
@@ -49,27 +59,24 @@ export default async function BountyTable({
               </TableCell>
               <TableCell>
                 {/* TODO: Add a copy to clipboard design */}
-                <a 
-                  href={createSolanaExplorerLink(bounty.signature)} 
+                <a
+                  href={createSolanaExplorerLink(bounty.signature)}
                   className="text-blue-600 hover:underline"
                   target="_blank"
-                >Signature</a>
+                >
+                  Signature
+                </a>
               </TableCell>
             </TableRow>
           ))
-        : (
+        ) : (
           <TableRow>
             <TableCell colSpan={5} className="text-center">
-              <EmptyState
-                message="No bounties found" 
-                icon={SearchIcon}
-              />
+              <EmptyState message="No bounties found" icon={SearchIcon} />
             </TableCell>
           </TableRow>
-        )
-
-        }
+        )}
       </TableBody>
     </Table>
-  )
+  );
 }

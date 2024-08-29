@@ -5,8 +5,8 @@ import { BountyStatus, db, RepositoryUserRole } from '@/db/db';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { getRepoNameFromFullName } from './utils';
 import { BountyReleasedDetail } from './types';
+import { getRepoNameFromFullName } from './utils';
 
 interface WalletProps {
   publicAddress: string;
@@ -187,8 +187,7 @@ export async function acceptBountyEscrow({
     console.log('Approved bounty escrow:', responseBody);
   } catch (error) {
     console.error('AcceptBountyEscrow Error: ', error);
-  }
-  finally {
+  } finally {
     revalidatePath('/maintainer/dashboard');
   }
 }
@@ -211,20 +210,20 @@ export async function releaseBountyEscrow({
         author: {
           select: {
             githubId: true,
-          }
+          },
         },
         receiver: {
           select: {
             githubId: true,
-          }
+          },
         },
         repository: {
           select: {
             name: true,
             installationId: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     const payload: BountyReleasedDetail = {
@@ -235,16 +234,19 @@ export async function releaseBountyEscrow({
       installationId: bounty.repository.installationId,
       authorGithubId: bounty.receiver!.githubId,
       transactionSignature,
-    }
+    };
 
     // Send fetch request to the github-app
-    const response = await fetch("http://localhost:3001/payobvio-github-app/escrow-released", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }); 
+    const response = await fetch(
+      'http://localhost:3001/payobvio-github-app/escrow-released',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     const responseBody = await response.json();
     console.log('Released bounty escrow:', responseBody);

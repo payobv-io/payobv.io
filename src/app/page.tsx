@@ -1,7 +1,7 @@
 import { AuthenticationButton } from '@/components/onboarding/authentication-button';
 import { Card, CardContent } from '@/components/ui/card';
-import { CodeIcon, DollarSignIcon, Github } from 'lucide-react';
 import { checkRootPageAccess } from '@/lib/actions';
+import { CodeIcon, DollarSignIcon, Github } from 'lucide-react';
 
 export default async function Page() {
   // Check if the user is already authenticated and complete the onboarding process
