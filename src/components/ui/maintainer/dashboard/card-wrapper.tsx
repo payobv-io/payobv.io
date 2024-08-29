@@ -1,7 +1,8 @@
 import {
   getPaidBountyDetails,
   getTotalMoneySpent,
-  totalRepositories,
+  getTotalRepositories,
+  getTotalUniqueContributors,
 } from '@/lib/data';
 import {
   BookIcon,
@@ -18,7 +19,8 @@ type CardWrapperProps = {
 export default async function CardWrapper({ userId }: CardWrapperProps) {
   const paidBountyDetails = await getPaidBountyDetails(userId);
   const totalMoneySpent = await getTotalMoneySpent(userId);
-  const totalRepostories = await totalRepositories(userId);
+  const totalRepositories = await getTotalRepositories(userId);
+  const totalContributors = await getTotalUniqueContributors(userId);
 
   return (
     <div className="grid gap-6 mb-8 md:grid-cols-3">
@@ -43,14 +45,14 @@ export default async function CardWrapper({ userId }: CardWrapperProps) {
         <StatCard
           index={3}
           title="Repositories"
-          value={totalRepostories.toString()}
+          value={totalRepositories.toString()}
           icon={<BookIcon className="h-6 w-6 text-gray-400" />}
           subText="Repositories managed by you"
         />
         <StatCard
           index={3}
           title="Contributors"
-          value={paidBountyDetails.totalBounties.toString()}
+          value={totalContributors.toString()}
           icon={<UsersIcon className="h-6 w-6 text-gray-400" />}
           subText="Received bounties"
         />

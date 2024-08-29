@@ -165,13 +165,41 @@ export const getPaidBountyDetails = async (
 };
 
 /**
+ *
+ * @param userId
+ * @returns  Total number of unique contributors (receivers)
+ */
+export const getTotalUniqueContributors = async (
+  userId: number
+): Promise<number> => {
+  try {
+    // Fetch the total number of unique contributors (receivers)
+    const uniqueContributors = await db.bounty.groupBy({
+      by: ['receiverId'],
+      where: {
+        authorId: userId,
+        status: BountyStatus.COMPLETED,
+      },
+      _count: {
+        _all: true,
+      },
+    });
+
+    return uniqueContributors.length;
+  } catch (error) {
+    console.error('Error fetching total contributors:', error);
+    return 0;
+  }
+};
+
+/**
  * Fetches the total number of repositories for the maintainer
  *
  * @param userId
  * @returns Total number of repositories for the maintainer
  *
  */
-export const totalRepositories = async (userId: number): Promise<number> => {
+export const getTotalRepositories = async (userId: number): Promise<number> => {
   try {
     const total = await db.repositoryUser.count({
       where: {
