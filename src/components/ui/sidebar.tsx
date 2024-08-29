@@ -25,7 +25,7 @@ export default function Sidebar({ links }: SidebarProps) {
         </div>
       </div>
       <div className='px-3'>
-        <WalletDetailsContainer />
+        {/* <WalletDetailsContainer /> */}
       </div>
     </div>
   );

@@ -7,6 +7,8 @@ import { NextResponse } from 'next/server';
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
+  console.log(`Middleware: ${req.nextUrl.pathname}, token: ${Boolean(token)}`);
+
   const { pathname } = req.nextUrl;
 
   if (!token && pathname !== '/') {
