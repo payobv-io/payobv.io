@@ -40,6 +40,12 @@ const ReleaseConfirmButton = (props: ReleaseConfirmButtonProps) => {
             });
           }
           console.log('Escrow released:', releaseEscrowFundResult);
+          toast({
+            title: 'Escrow Released Successfully',
+            description: `The bounty amount has been released to the contributor`,
+            duration: 5000,
+            variant: 'success',
+          });
         } catch (error) {
           let errorMessage = 'Failed to release the escrow';
           if (error instanceof Error) {
