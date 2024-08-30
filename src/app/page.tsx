@@ -1,7 +1,8 @@
 import { AuthenticationButton } from '@/components/onboarding/authentication-button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Logo } from '@/components/ui/logo';
 import { checkRootPageAccess } from '@/lib/actions';
-import { CodeIcon, DollarSignIcon, Github } from 'lucide-react';
+import { CodeIcon, DollarSignIcon } from 'lucide-react';
 
 export default async function Page() {
   // Check if the user is already authenticated and complete the onboarding process
@@ -13,12 +14,7 @@ export default async function Page() {
         <div className="flex-1 flex items-center justify-center p-4">
           <Card className="w-full max-w-md bg-white shadow-lg rounded-xl overflow-hidden">
             <CardContent className="p-6">
-              <div className="flex flex-col items-center justify-center mb-8">
-                <Github className="h-16 w-16 text-gray-900 mb-4" />
-                <h1 className="text-2xl font-bold text-gray-900 text-center">
-                  Welcome to GitHub Bounty
-                </h1>
-              </div>
+              <Logo />
               <AuthenticationButton />
               <p className="text-xs text-gray-500 text-center mt-8">
                 By continuing, you agree to our{' '}
@@ -37,7 +33,7 @@ export default async function Page() {
         <div className="hidden lg:flex flex-1 bg-gray-900 text-white p-12 flex-col justify-center">
           <h2 className="text-4xl font-bold mb-6">Empower Open Source</h2>
           <p className="text-xl mb-8">
-            Connect, contribute, and earn with GitHub Bounty
+            Connect, contribute, and earn with Payobv.io
           </p>
           <div className="space-y-4">
             <div className="flex items-center">

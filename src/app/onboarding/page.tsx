@@ -2,10 +2,10 @@ import { SignInWithGithub } from '@/components/onboarding/connect-github';
 import { SelectRole } from '@/components/onboarding/select-role';
 import { SelectWallet } from '@/components/onboarding/select-wallet';
 import { Card, CardContent } from '@/components/ui/card';
+import { Logo } from '@/components/ui/logo';
 
 import { findExistingUser, getServerSessionID } from '@/lib/actions';
 import { RepositoryUserRole } from '@prisma/client';
-import { Github } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 export default async function Page({ searchParams }: any) {
@@ -60,12 +60,7 @@ export default async function Page({ searchParams }: any) {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4">
         <Card className="w-full max-w-md bg-white shadow-lg rounded-xl overflow-hidden">
           <CardContent className="p-6">
-            <div className="flex flex-col items-center justify-center mb-8">
-              <Github className="h-16 w-16 text-gray-900 mb-4" />
-              <h1 className="text-2xl font-bold text-gray-900 text-center">
-                Welcome to GitHub Bounty
-              </h1>
-            </div>
+            <Logo />
             <div className="flex justify-center space-x-4 mb-6">
               <div
                 className={`w-8 h-8 rounded-full ${
