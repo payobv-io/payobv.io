@@ -77,7 +77,7 @@ export default async function BountyTable({
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={5} className="text-center">
+            <TableCell colSpan={6} className="text-center">
               <EmptyState
                 message="No recent bounties found"
                 icon={SearchIcon}
