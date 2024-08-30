@@ -1,7 +1,7 @@
 import { BadgeProps } from '@/components/ui/badge';
 import { BountyStatus } from '@prisma/client';
 
-export const GITHUB_APP_API_BASE_URL = `${process.env.NEXT_PUBLIC_GITHUB_APP_SERVER_URL}/payobvio-github-app`;
+export const GITHUB_APP_API_BASE_URL = `${process.env.NEXT_PUBLIC_GITHUB_APP_SERVER_URL}/api/payobvio-github-app`;
 export const SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK as string;
 
 export const bountyStatusDetails: {
