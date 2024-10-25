@@ -5,6 +5,7 @@ import CardWrapper from '@/components/ui/maintainer/dashboard/card-wrapper';
 import BountyTable from '@/components/ui/maintainer/dashboard/table';
 import { CardWrapperSkeleton } from '@/components/ui/maintainer/skeletons';
 import { getServerSessionID } from '@/lib/actions';
+import { GITHUB_APP_INSTALLATION_URL } from '@/lib/constants';
 import { PlusCircleIcon } from 'lucide-react';
 import { Suspense } from 'react';
 
@@ -20,7 +21,7 @@ export default async function Page() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-semibold text-gray-800">Dashboard</h1>
         <a
-          href="https://github.com/apps/payobvio-github-app/installations/new"
+          href={GITHUB_APP_INSTALLATION_URL}
           target="_blank"
         >
           <Button className="flex items-center space-x-2">

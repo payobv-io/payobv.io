@@ -6,6 +6,7 @@ import { CodeIcon, WrenchIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from '../ui/button';
+import { GITHUB_APP_INSTALLATION_URL } from '@/lib/constants';
 
 export const SelectRole = () => {
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export const SelectRole = () => {
       role,
     });
     if (role === 'maintainer') {
-      const installationUrl = `https://github.com/apps/payobvio-github-app/installations/new`;
+      const installationUrl = GITHUB_APP_INSTALLATION_URL;
       window.location.href = installationUrl;
     } else {
       router.push('/contributor/dashboard');
