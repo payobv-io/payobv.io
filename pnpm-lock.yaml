@@ -18,7 +18,7 @@ dependencies:
     specifier: ^21.0.2
     version: 21.0.2
   '@prisma/client':
-    specifier: ^5.19.0
+    specifier: ^5.21.1
     version: 5.21.1(prisma@5.21.1)
   '@radix-ui/react-avatar':
     specifier: ^1.1.0
