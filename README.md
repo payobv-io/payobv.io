@@ -1,4 +1,4 @@
-# payobv.io - Obvious Payments for Open Source Contributors
+# payobv.io - Bridging OS Incentives, Payments, and Proof of Skill
 
 [payobv.io](https://payobv-io-ten.vercel.app/) is a platform that allows open source contributors to receive bounties from users of their projects. It is a simple and transparent way to support the people who create the software you use every day.
 
